@@ -351,10 +351,10 @@ export function TasksBoard({ clients, tarefas: initial }: { clients: Client[]; t
           const done = tasks.filter(t => t.status === 'finalizado').length
 
           return (
-            <div key={col.key} className="flex flex-col gap-3">
+            <div key={col.key} className="flex flex-col">
 
               {/* Column header */}
-              <div className={`rounded-xl border ${col.accent} bg-[rgba(255,255,255,0.04)] overflow-hidden`}>
+              <div className={`rounded-xl border ${col.accent} bg-[rgba(255,255,255,0.04)] overflow-hidden mb-3`}>
                 <div className={`h-1 w-full ${col.bar}`} />
                 <div className="flex items-center justify-between px-3 py-2.5">
                   <div className="flex items-center gap-2">
@@ -368,7 +368,7 @@ export function TasksBoard({ clients, tarefas: initial }: { clients: Client[]; t
               </div>
 
               {/* Tasks */}
-              <div className="space-y-2 min-h-[80px]">
+              <div className="space-y-2">
                 {tasks.map(task => (
                   <TaskCard
                     key={task.id}
