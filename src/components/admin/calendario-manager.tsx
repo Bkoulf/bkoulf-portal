@@ -22,12 +22,12 @@ interface Event {
 }
 
 const typeConfig: Record<string, { label: string; color: string; dot: string }> = {
-  reuniao:    { label: 'Reunião',    color: 'bg-[rgba(255,255,255,0.08)] text-[#D4A843] border-[rgba(212,168,67,0.2)]',      dot: 'bg-[#D4A843]' },
-  gravacao:   { label: 'Gravação',   color: 'bg-[rgba(212,168,67,0.1)] text-[#D4A843] border-[rgba(255,255,255,0.18)]',    dot: 'bg-[#D4A843]' },
-  entrega:    { label: 'Entrega',    color: 'bg-[rgba(232,124,107,0.1)] text-[#E87C6B] border-[rgba(232,124,107,0.25)]',  dot: 'bg-[#E87C6B]' },
-  revisao:    { label: 'Revisão',    color: 'bg-[rgba(155,127,212,0.1)] text-[#9B7FD4] border-[rgba(155,127,212,0.25)]',  dot: 'bg-[#9B7FD4]' },
-  publicacao: { label: 'Publicação', color: 'bg-[rgba(76,175,136,0.1)] text-[#4CAF88] border-[rgba(76,175,136,0.25)]',   dot: 'bg-[#4CAF88]' },
-  outro:      { label: 'Outro',      color: 'bg-[rgba(255,255,255,0.06)] text-[#B0B8C4] border-[rgba(255,255,255,0.1)]', dot: 'bg-[#B0B8C4]' },
+  reuniao:    { label: 'Reunião',    color: 'bg-[rgba(45,125,210,0.1)]   text-[#2D7DD2] border-[rgba(45,125,210,0.25)]',   dot: 'bg-[#2D7DD2]' },
+  gravacao:   { label: 'Gravação',   color: 'bg-[rgba(212,168,67,0.1)]   text-[#D4A843] border-[rgba(212,168,67,0.25)]',   dot: 'bg-[#D4A843]' },
+  entrega:    { label: 'Entrega',    color: 'bg-[rgba(232,124,107,0.1)]  text-[#E87C6B] border-[rgba(232,124,107,0.25)]',  dot: 'bg-[#E87C6B]' },
+  revisao:    { label: 'Revisão',    color: 'bg-[rgba(155,127,212,0.1)]  text-[#9B7FD4] border-[rgba(155,127,212,0.25)]',  dot: 'bg-[#9B7FD4]' },
+  publicacao: { label: 'Publicação', color: 'bg-[rgba(76,175,136,0.1)]   text-[#4CAF88] border-[rgba(76,175,136,0.25)]',   dot: 'bg-[#4CAF88]' },
+  outro:      { label: 'Outro',      color: 'bg-[rgba(255,255,255,0.06)] text-[#B0B8C4] border-[rgba(255,255,255,0.1)]',   dot: 'bg-[#B0B8C4]' },
 }
 
 function formatDateTime(iso: string) {
