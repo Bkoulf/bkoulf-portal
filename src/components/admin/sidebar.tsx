@@ -19,14 +19,15 @@ import {
   UserCircle,
   LogOut,
   Crosshair,
+  HeadphonesIcon,
 } from 'lucide-react'
 
-const gestao = [
-  { href: '/admin',           label: 'Visão Geral', icon: LayoutDashboard },
-  { href: '/admin/clientes',  label: 'Clientes',    icon: Users },
-  { href: '/admin/entregas',  label: 'Entregas',    icon: PackageCheck },
-  { href: '/admin/calendario',label: 'Calendário',  icon: Calendar },
-  { href: '/admin/leads',     label: 'Leads',       icon: Crosshair },
+const ferramentas = [
+  { href: '/admin',            label: 'Visão Geral', icon: LayoutDashboard },
+  { href: '/admin/clientes',   label: 'Clientes',    icon: Users },
+  { href: '/admin/entregas',   label: 'Entregas',    icon: PackageCheck },
+  { href: '/admin/calendario', label: 'Calendário',  icon: Calendar },
+  { href: '/admin/leads',      label: 'Leads',       icon: Crosshair },
 ]
 
 const servicos = [
@@ -37,7 +38,8 @@ const servicos = [
 ]
 
 const ajuda = [
-  { href: '/admin/assistente', label: 'Bk Assistant', icon: Bot },
+  { href: '/admin/assistente', label: 'BK Assistant', icon: Bot },
+  { href: '/admin/suporte',    label: 'Suporte',       icon: HeadphonesIcon },
 ]
 
 const bottomItems = [
@@ -108,10 +110,10 @@ export function AdminSidebar() {
       <nav className="flex-1 overflow-y-auto scrollbar-none py-4 px-3 space-y-5">
         <div>
           <p className="px-3 mb-2 text-[9px] font-bold text-white/30 uppercase tracking-[3px]">
-            Gestão
+            Ferramentas
           </p>
           <ul className="space-y-0.5">
-            {gestao.map((item) => (
+            {ferramentas.map((item) => (
               <li key={item.href}>
                 <NavLink {...item} isActive={pathname === item.href} />
               </li>

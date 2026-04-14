@@ -9,22 +9,28 @@ import { cn } from '@/lib/utils'
 import {
   Menu, X, LogOut,
   Users, LayoutDashboard, PackageCheck, Calendar,
-  TrendingUp, Video, Palette, Monitor, Bot, UserCircle, Crosshair,
+  TrendingUp, Video, Palette, Monitor, Bot, UserCircle, Crosshair, HeadphonesIcon,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
-const navItems = [
-  { href: '/admin',                    label: 'Visão Geral',       icon: LayoutDashboard },
-  { href: '/admin/clientes',           label: 'Clientes',          icon: Users },
-  { href: '/admin/entregas',           label: 'Entregas',          icon: PackageCheck },
-  { href: '/admin/calendario',         label: 'Calendário',        icon: Calendar },
-  { href: '/admin/identidade-visual',  label: 'Identidade Visual', icon: Palette },
-  { href: '/admin/videos',             label: 'Edição de Vídeos',  icon: Video },
-  { href: '/admin/website',            label: 'Website',           icon: Monitor },
-  { href: '/admin/trafego-pago',       label: 'Tráfego Pago',      icon: TrendingUp },
-  { href: '/admin/leads',              label: 'Leads',             icon: Crosshair },
-  { href: '/admin/assistente',         label: 'Bk Assistant',      icon: Bot },
-  { href: '/admin/perfil',             label: 'Meu Perfil',        icon: UserCircle },
+const ferramentas = [
+  { href: '/admin',            label: 'Visão Geral', icon: LayoutDashboard },
+  { href: '/admin/clientes',   label: 'Clientes',    icon: Users },
+  { href: '/admin/entregas',   label: 'Entregas',    icon: PackageCheck },
+  { href: '/admin/calendario', label: 'Calendário',  icon: Calendar },
+  { href: '/admin/leads',      label: 'Leads',       icon: Crosshair },
+]
+
+const servicos = [
+  { href: '/admin/identidade-visual', label: 'Identidade Visual', icon: Palette },
+  { href: '/admin/videos',            label: 'Edição de Vídeos',  icon: Video },
+  { href: '/admin/website',           label: 'Website',           icon: Monitor },
+  { href: '/admin/trafego-pago',      label: 'Tráfego Pago',      icon: TrendingUp },
+]
+
+const ajuda = [
+  { href: '/admin/assistente', label: 'BK Assistant', icon: Bot },
+  { href: '/admin/suporte',    label: 'Suporte',       icon: HeadphonesIcon },
 ]
 
 interface Props {
@@ -132,33 +138,43 @@ export function AdminMobileHeader({ userName }: Props) {
             </div>
 
             {/* Nav */}
-            <nav className="flex-1 overflow-y-auto py-4 px-3">
-              <ul className="space-y-0.5">
-                {navItems.map((item) => {
-                  const Icon = item.icon
-                  const isActive = pathname === item.href
-                  return (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        onClick={() => setOpen(false)}
-                        className={cn(
-                          'relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150',
-                          isActive
-                            ? 'bg-[rgba(212,168,67,0.1)] text-white'
-                            : 'text-[#8B9AAB] hover:text-white hover:bg-[rgba(255,255,255,0.05)]'
-                        )}
-                      >
-                        {isActive && (
-                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[#D4A843] rounded-r-full" />
-                        )}
-                        <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-[#D4A843]' : 'opacity-60')} />
-                        {item.label}
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
+            <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-5">
+              {[
+                { label: 'Ferramentas', items: ferramentas },
+                { label: 'Serviços',    items: servicos },
+                { label: 'Ajuda',       items: ajuda },
+                { label: 'Conta',       items: [{ href: '/admin/perfil', label: 'Meu Perfil', icon: UserCircle }] },
+              ].map(({ label, items }) => (
+                <div key={label}>
+                  <p className="px-3 mb-2 text-[9px] font-bold text-white/30 uppercase tracking-[3px]">{label}</p>
+                  <ul className="space-y-0.5">
+                    {items.map((item) => {
+                      const Icon = item.icon
+                      const isActive = pathname === item.href
+                      return (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            onClick={() => setOpen(false)}
+                            className={cn(
+                              'relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150',
+                              isActive
+                                ? 'bg-[rgba(212,168,67,0.1)] text-white'
+                                : 'text-[#8B9AAB] hover:text-white hover:bg-[rgba(255,255,255,0.05)]'
+                            )}
+                          >
+                            {isActive && (
+                              <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[#D4A843] rounded-r-full" />
+                            )}
+                            <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-[#D4A843]' : 'opacity-60')} />
+                            {item.label}
+                          </Link>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              ))}
             </nav>
 
             {/* User + logout */}
