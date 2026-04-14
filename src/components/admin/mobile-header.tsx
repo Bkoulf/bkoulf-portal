@@ -167,13 +167,6 @@ export function AdminMobileHeader({ userName }: Props) {
               style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
             >
               <div className="px-3 py-2 text-xs text-[#B0B8C4]">{userName}</div>
-              <Link
-                href="/portal/dashboard"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#B0B8C4] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-all"
-              >
-                Ver como cliente →
-              </Link>
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[rgba(176,184,196,0.6)] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-all"

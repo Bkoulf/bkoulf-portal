@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { ChevronRight, UserCircle, LogOut, ArrowRightLeft } from 'lucide-react'
+import { ChevronRight, UserCircle, LogOut } from 'lucide-react'
 import { toast } from 'sonner'
 
 const PAGE_NAMES: Record<string, string> = {
@@ -103,14 +103,6 @@ export function AdminTopbar({ userName }: { userName: string }) {
             >
               <UserCircle className="w-4 h-4 shrink-0" />
               Meu Perfil
-            </button>
-            <button
-              onClick={() => { setOpen(false); router.push('/portal/dashboard') }}
-              className="w-full flex items-center gap-2.5 px-3 py-2 text-sm hover:bg-[rgba(212,168,67,0.06)] transition-colors text-left rounded-lg"
-              style={{ color: '#D4A843' }}
-            >
-              <ArrowRightLeft className="w-4 h-4 shrink-0" />
-              Ver como cliente
             </button>
             <div className="h-px mx-2 my-1" style={{ background: 'rgba(255,255,255,0.06)' }} />
             <button
