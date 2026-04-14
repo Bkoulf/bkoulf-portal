@@ -10,12 +10,6 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Arquivos',
-}
-
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

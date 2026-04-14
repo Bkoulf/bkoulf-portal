@@ -6,12 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { User, Loader2, Camera } from 'lucide-react'
 import { toast } from 'sonner'
 
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Meu Perfil',
-}
-
 
 export default function PerfilPage() {
   const [fullName, setFullName] = useState('')
