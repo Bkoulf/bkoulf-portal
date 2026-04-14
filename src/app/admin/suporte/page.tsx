@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { AdminSuporteClient } from '@/components/admin/suporte-client'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Suporte',
+}
+
+
 export default async function AdminSuportePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

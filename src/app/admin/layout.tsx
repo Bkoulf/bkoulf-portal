@@ -1,9 +1,17 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AdminSidebar } from '@/components/admin/sidebar'
 import { AdminTopbar } from '@/components/admin/topbar'
 import { AdminMobileHeader } from '@/components/admin/mobile-header'
 import { AdminMobileBottomNav } from '@/components/admin/mobile-bottom-nav'
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Bkoulf Admin',
+    default: 'Admin | Bkoulf',
+  },
+}
 
 export default async function AdminLayout({
   children,

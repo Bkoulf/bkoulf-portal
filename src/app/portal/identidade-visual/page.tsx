@@ -4,6 +4,13 @@ import { ContactServiceBanner } from '@/components/portal/contact-service-banner
 import { Card, CardContent } from '@/components/ui/card'
 import { Palette } from 'lucide-react'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Identidade Visual',
+}
+
+
 export default async function IdentidadeVisualPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

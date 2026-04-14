@@ -1,5 +1,13 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Bkoulf Portal',
+    default: 'Portal | Bkoulf',
+  },
+}
 import { Sidebar } from '@/components/portal/sidebar'
 import { Header } from '@/components/portal/header'
 import { PortalTopbar } from '@/components/portal/topbar'

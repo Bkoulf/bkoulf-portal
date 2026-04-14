@@ -4,6 +4,13 @@ import { ContactServiceBanner } from '@/components/portal/contact-service-banner
 import { Card, CardContent } from '@/components/ui/card'
 import { Globe } from 'lucide-react'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Website',
+}
+
+
 export default async function WebsitePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

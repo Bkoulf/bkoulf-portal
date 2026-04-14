@@ -7,6 +7,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { UserCircle, Loader2, Camera, ShieldCheck, ArrowRightLeft } from 'lucide-react'
 import { toast } from 'sonner'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Meu Perfil',
+}
+
+
 export default function AdminPerfilPage() {
   const router = useRouter()
   const [fullName, setFullName] = useState('')

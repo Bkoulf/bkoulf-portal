@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { Calendar, Clock, CalendarX } from 'lucide-react'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Calendário',
+}
+
+
 const typeConfig: Record<string, { label: string; color: string; bg: string; dot: string }> = {
   reuniao:    { label: 'Reunião',    color: 'text-[#2D7DD2]', bg: 'bg-[rgba(45,125,210,0.1)] border-[rgba(45,125,210,0.2)]',     dot: 'bg-[#2D7DD2]' },
   gravacao:   { label: 'Gravação',   color: 'text-[#D4A843]', bg: 'bg-[rgba(212,168,67,0.1)] border-[rgba(212,168,67,0.25)]',    dot: 'bg-[#D4A843]' },

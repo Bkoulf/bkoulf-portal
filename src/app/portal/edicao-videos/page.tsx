@@ -4,6 +4,13 @@ import { ContactServiceBanner } from '@/components/portal/contact-service-banner
 import { Card, CardContent } from '@/components/ui/card'
 import { Video } from 'lucide-react'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Edição de Vídeos',
+}
+
+
 export default async function EdicaoVideosPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

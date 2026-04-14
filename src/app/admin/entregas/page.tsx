@@ -3,6 +3,13 @@ import { EntregasManager } from '@/components/admin/entregas-manager'
 import { Card, CardContent } from '@/components/ui/card'
 import { Users, PackageCheck, Clock, MessageSquare } from 'lucide-react'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Entregas',
+}
+
+
 export default async function AdminEntregasPage() {
   const supabase = await createClient()
 

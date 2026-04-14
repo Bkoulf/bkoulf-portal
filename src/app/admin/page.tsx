@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { TasksBoard } from '@/components/admin/tasks-board'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Visão Geral',
+}
+
+
 export default async function AdminPage() {
   const supabase = await createClient()
 

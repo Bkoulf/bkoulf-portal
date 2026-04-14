@@ -10,6 +10,12 @@ import type {
   TrafegoPagoHistorico,
 } from '@/components/portal/trafego-pago-client'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Tráfego Pago',
+}
+
 function getPeriod(monthsAgo: number): string {
   const d = new Date()
   d.setDate(1)

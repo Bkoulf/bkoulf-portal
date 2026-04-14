@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { VideosManager } from '@/components/admin/videos-manager'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Edição de Vídeos',
+}
+
+
 export default async function AdminVideosPage() {
   const supabase = await createClient()
 

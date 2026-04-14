@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { WebsiteManager } from '@/components/admin/website-manager'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Website',
+}
+
+
 export default async function AdminWebsitePage() {
   const supabase = await createClient()
 

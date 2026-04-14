@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { BarChart2, FileText, ExternalLink, Download, TrendingUp, Video, Palette, Globe, CheckCircle2, Clock, Zap } from 'lucide-react'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Relatórios',
+}
+
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface ReportDoc {

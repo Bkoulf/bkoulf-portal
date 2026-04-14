@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { TrafegoPagoManager } from '@/components/admin/trafego-pago-manager'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Tráfego Pago',
+}
+
+
 export default async function AdminTrafegoPagoPage() {
   const supabase = await createClient()
 

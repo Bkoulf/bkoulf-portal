@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { IdentidadeVisualManager } from '@/components/admin/identidade-visual-manager'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Identidade Visual',
+}
+
+
 export default async function AdminIdentidadeVisualPage() {
   const supabase = await createClient()
 

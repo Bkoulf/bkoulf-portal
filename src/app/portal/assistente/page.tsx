@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { AiChatClient } from '@/components/portal/ai-chat-client'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'BK Assistant',
+}
+
+
 export default async function AssistentePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

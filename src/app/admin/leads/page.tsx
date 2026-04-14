@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { LeadsDashboard } from '@/components/admin/leads-dashboard'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Leads',
+}
+
+
 export default async function AdminLeadsPage() {
   const supabase = await createClient()
 

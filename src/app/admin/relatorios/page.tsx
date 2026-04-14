@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { RelatoriosManager } from '@/components/admin/relatorios-manager'
 
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Relatórios',
+}
+
+
 export default async function AdminRelatoriosPage() {
   const supabase = await createClient()
 
