@@ -48,50 +48,71 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* ── Bkoulf Design Tokens ── */
+/* ── Bkoulf Blue System ── */
 :root {
-  --bk-black:    #050A14;
-  --bk-navy:     #0A1628;
-  --bk-deep:     #1B4F8A;
-  --bk-blue:     #2D7DD2;
-  --bk-sky:      #5BAFF5;
-  --bk-graphite: #1C2333;
-  --bk-silver:   #B0B8C4;
-  --bk-white:    #FFFFFF;
-  --bk-g-bg:     rgba(255,255,255,0.04);
-  --bk-g-br:     rgba(255,255,255,0.08);
+  /* Superfícies */
+  --bk-base:     #020B1A;   /* fundo global */
+  --bk-surface:  #071525;   /* cards / painéis */
+  --bk-elevated: #0C1D35;   /* cards elevados */
+  --bk-overlay:  #102340;   /* hover / overlay */
 
-  --background: #050A14;
-  --foreground: #FFFFFF;
-  --card: #1C2333;
-  --card-foreground: #FFFFFF;
-  --popover: #0A1628;
-  --popover-foreground: #FFFFFF;
+  /* Escala de azul */
+  --bk-blue-900: #071525;
+  --bk-blue-800: #0C1D35;
+  --bk-blue-700: #152E52;
+  --bk-blue-600: #1B4F8A;
+  --bk-blue-500: #2564B8;
+  --bk-blue-400: #2D7DD2;   /* primário */
+  --bk-blue-300: #4A9FE8;   /* destaque */
+  --bk-blue-200: #7DC4FF;   /* sky */
+  --bk-blue-100: #B8DCFF;   /* pale */
+
+  /* Texto */
+  --bk-text-primary:   #EBF4FF;   /* branco com toque azul */
+  --bk-text-secondary: #7AAAC8;   /* médio — azul acinzentado */
+  --bk-text-muted:     #3D607A;   /* baixo contraste */
+
+  /* Borders (azul-tintado) */
+  --bk-border-subtle: rgba(45,125,210,0.15);
+  --bk-border-medium: rgba(45,125,210,0.30);
+  --bk-border-bright: rgba(45,125,210,0.60);
+
+  /* Cards */
+  --bk-g-bg: rgba(45,125,210,0.06);
+  --bk-g-br: rgba(45,125,210,0.18);
+
+  /* Shadcn tokens mapeados */
+  --background: #020B1A;
+  --foreground: #EBF4FF;
+  --card: #071525;
+  --card-foreground: #EBF4FF;
+  --popover: #0C1D35;
+  --popover-foreground: #EBF4FF;
   --primary: #2D7DD2;
   --primary-foreground: #FFFFFF;
-  --secondary: #1C2333;
-  --secondary-foreground: #B0B8C4;
-  --muted: #1C2333;
-  --muted-foreground: #B0B8C4;
-  --accent: rgba(45,125,210,0.12);
-  --accent-foreground: #5BAFF5;
-  --destructive: #FF4D4D;
-  --border: rgba(255,255,255,0.08);
-  --input: rgba(255,255,255,0.06);
+  --secondary: #0C1D35;
+  --secondary-foreground: #7AAAC8;
+  --muted: #071525;
+  --muted-foreground: #7AAAC8;
+  --accent: rgba(45,125,210,0.15);
+  --accent-foreground: #7DC4FF;
+  --destructive: #FF4D6A;
+  --border: rgba(45,125,210,0.15);
+  --input: rgba(45,125,210,0.10);
   --ring: #2D7DD2;
   --chart-1: #2D7DD2;
-  --chart-2: #5BAFF5;
+  --chart-2: #4A9FE8;
   --chart-3: #1B4F8A;
-  --chart-4: #0A1628;
-  --chart-5: #B0B8C4;
+  --chart-4: #7DC4FF;
+  --chart-5: #7AAAC8;
   --radius: 0.75rem;
-  --sidebar: #0A1628;
-  --sidebar-foreground: #FFFFFF;
+  --sidebar: #071525;
+  --sidebar-foreground: #EBF4FF;
   --sidebar-primary: #2D7DD2;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: rgba(45,125,210,0.08);
-  --sidebar-accent-foreground: #5BAFF5;
-  --sidebar-border: rgba(255,255,255,0.08);
+  --sidebar-accent: rgba(45,125,210,0.12);
+  --sidebar-accent-foreground: #7DC4FF;
+  --sidebar-border: rgba(45,125,210,0.15);
   --sidebar-ring: #2D7DD2;
 }
 
@@ -100,11 +121,42 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
-  html {
-    @apply font-sans;
-  }
+}
+
+/* ── Bkoulf Gold System (Admin) ── */
+:root {
+  /* Superfícies */
+  --bk-gold-base:     #080600;   /* fundo global admin */
+  --bk-gold-surface:  #120D02;   /* cards / painéis */
+  --bk-gold-elevated: #1C1505;   /* cards elevados */
+  --bk-gold-overlay:  #28200A;   /* hover / overlay */
+
+  /* Escala de dourado */
+  --bk-gold-900: #120D02;
+  --bk-gold-800: #1C1505;
+  --bk-gold-700: #2E2208;
+  --bk-gold-600: #6B520E;
+  --bk-gold-500: #9B7820;
+  --bk-gold-400: #D4A843;   /* primário */
+  --bk-gold-300: #E8C060;   /* destaque */
+  --bk-gold-200: #F5D88A;   /* pale gold */
+  --bk-gold-100: #FFF0C5;   /* ivory */
+
+  /* Texto */
+  --bk-text-gold-primary:   #FFF8E8;   /* branco com toque dourado */
+  --bk-text-gold-secondary: #C4A055;   /* médio — dourado acinzentado */
+  --bk-text-gold-muted:     #5A4012;   /* baixo contraste */
+
+  /* Borders */
+  --bk-border-gold-subtle: rgba(212,168,67,0.15);
+  --bk-border-gold-medium: rgba(212,168,67,0.30);
+  --bk-border-gold-bright: rgba(212,168,67,0.60);
+
+  /* Cards */
+  --bk-g-gold-bg: rgba(212,168,67,0.06);
+  --bk-g-gold-br: rgba(212,168,67,0.18);
 }
 
 @layer utilities {

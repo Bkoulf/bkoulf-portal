@@ -22,12 +22,12 @@ interface Event {
 }
 
 const typeConfig: Record<string, { label: string; color: string; dot: string }> = {
-  reuniao:    { label: 'Reunião',    color: 'bg-[rgba(45,125,210,0.1)] text-[#2D7DD2] border-[rgba(45,125,210,0.2)]',      dot: 'bg-[#2D7DD2]' },
-  gravacao:   { label: 'Gravação',   color: 'bg-[rgba(212,168,67,0.1)] text-[#D4A843] border-[rgba(212,168,67,0.25)]',    dot: 'bg-[#D4A843]' },
+  reuniao:    { label: 'Reunião',    color: 'bg-[rgba(255,255,255,0.08)] text-[#D4A843] border-[rgba(212,168,67,0.2)]',      dot: 'bg-[#D4A843]' },
+  gravacao:   { label: 'Gravação',   color: 'bg-[rgba(212,168,67,0.1)] text-[#D4A843] border-[rgba(255,255,255,0.18)]',    dot: 'bg-[#D4A843]' },
   entrega:    { label: 'Entrega',    color: 'bg-[rgba(232,124,107,0.1)] text-[#E87C6B] border-[rgba(232,124,107,0.25)]',  dot: 'bg-[#E87C6B]' },
   revisao:    { label: 'Revisão',    color: 'bg-[rgba(155,127,212,0.1)] text-[#9B7FD4] border-[rgba(155,127,212,0.25)]',  dot: 'bg-[#9B7FD4]' },
   publicacao: { label: 'Publicação', color: 'bg-[rgba(76,175,136,0.1)] text-[#4CAF88] border-[rgba(76,175,136,0.25)]',   dot: 'bg-[#4CAF88]' },
-  outro:      { label: 'Outro',      color: 'bg-[rgba(255,255,255,0.05)] text-[#B0B8C4] border-[rgba(255,255,255,0.1)]', dot: 'bg-[#B0B8C4]' },
+  outro:      { label: 'Outro',      color: 'bg-[rgba(255,255,255,0.06)] text-[#B0B8C4] border-[rgba(255,255,255,0.1)]', dot: 'bg-[#B0B8C4]' },
 }
 
 function formatDateTime(iso: string) {
@@ -47,18 +47,18 @@ function EventRow({ event, clientName, onDelete }: { event: Event; clientName: s
   const date = new Date(event.event_date)
   const today = isToday(event.event_date)
   return (
-    <div className={`flex items-center gap-4 p-3.5 rounded-xl border transition-colors ${today ? 'bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.08)]' : 'bg-[#1C2333]/60 border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.12)]'}`}>
+    <div className={`flex items-center gap-4 p-3.5 rounded-xl border transition-colors ${today ? 'bg-[rgba(255,255,255,0.06)] border-[rgba(255,255,255,0.08)]' : 'bg-[#18181B]/60 border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.12)]'}`}>
       {/* Data */}
       <div className="shrink-0 text-center w-11">
         <p className={`text-lg font-black leading-none ${today ? 'text-[#D4A843]' : 'text-white'}`}>{date.getDate().toString().padStart(2, '0')}</p>
         <p className="text-xs text-[rgba(176,184,196,0.6)] uppercase mt-0.5">{date.toLocaleString('pt-BR', { month: 'short' })}</p>
       </div>
-      <div className={`w-px h-8 shrink-0 ${today ? 'bg-[rgba(255,255,255,0.05)]' : 'bg-[rgba(255,255,255,0.1)]'}`} />
+      <div className={`w-px h-8 shrink-0 ${today ? 'bg-[rgba(255,255,255,0.06)]' : 'bg-[rgba(255,255,255,0.1)]'}`} />
       {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p className="text-sm font-semibold text-white truncate">{event.title}</p>
-          {today && <span className="text-xs font-semibold text-[#D4A843] bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] px-1.5 py-0.5 rounded-full shrink-0">Hoje</span>}
+          {today && <span className="text-xs font-semibold text-[#D4A843] bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.08)] px-1.5 py-0.5 rounded-full shrink-0">Hoje</span>}
         </div>
         <div className="flex items-center gap-3 mt-0.5">
           <span className="text-xs text-[rgba(176,184,196,0.6)] truncate">{clientName}</span>
@@ -142,7 +142,7 @@ export function CalendarioManager({ clients, events: initial }: { clients: Clien
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.05)] flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.06)] flex items-center justify-center shrink-0">
               <Calendar className="w-5 h-5 text-[#D4A843]" />
             </div>
             <div>
@@ -227,7 +227,7 @@ export function CalendarioManager({ clients, events: initial }: { clients: Clien
                 value={form.clientId}
                 onChange={e => setForm(p => ({ ...p, clientId: e.target.value }))}
                 required
-                className="w-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(212,168,67,0.3)]"
+                className="w-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(212,168,67,0.3)]"
               >
                 <option value="">Selecione o cliente</option>
                 {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -241,7 +241,7 @@ export function CalendarioManager({ clients, events: initial }: { clients: Clien
                 onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
                 required
                 placeholder="Ex: Reunião de briefing"
-                className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]"
+                className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]"
               />
             </div>
 
@@ -253,7 +253,7 @@ export function CalendarioManager({ clients, events: initial }: { clients: Clien
                   value={form.eventDate}
                   onChange={e => setForm(p => ({ ...p, eventDate: e.target.value }))}
                   required
-                  className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white"
+                  className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white"
                 />
               </div>
               <div className="space-y-1.5">
@@ -261,7 +261,7 @@ export function CalendarioManager({ clients, events: initial }: { clients: Clien
                 <select
                   value={form.type}
                   onChange={e => setForm(p => ({ ...p, type: e.target.value }))}
-                  className="w-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(212,168,67,0.3)]"
+                  className="w-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(212,168,67,0.3)]"
                 >
                   {Object.entries(typeConfig).map(([key, val]) => (
                     <option key={key} value={key}>{val.label}</option>
@@ -276,7 +276,7 @@ export function CalendarioManager({ clients, events: initial }: { clients: Clien
                 value={form.description}
                 onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
                 placeholder="Detalhes do evento..."
-                className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] min-h-[70px]"
+                className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] min-h-[70px]"
               />
             </div>
 

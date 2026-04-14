@@ -122,7 +122,7 @@ export function ServiceConfigModal({ open, clientId, clientName, onClose }: Prop
               const isOpen = expanded === key
 
               return (
-                <div key={key} className={`rounded-lg border transition-colors ${svc.enabled ? 'border-[rgba(255,255,255,0.08)] bg-[#1C2333]' : 'border-[rgba(255,255,255,0.08)] bg-[#1C2333]/50'}`}>
+                <div key={key} className={`rounded-lg border transition-colors ${svc.enabled ? 'border-[rgba(255,255,255,0.08)] bg-[#18181B]' : 'border-[rgba(255,255,255,0.08)] bg-[#18181B]/50'}`}>
                   <div className="flex items-center gap-3 p-3">
                     <input
                       type="checkbox"

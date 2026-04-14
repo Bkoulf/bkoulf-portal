@@ -45,9 +45,9 @@ export function WebsiteManager({ clients }: { clients: ClientItem[] }) {
   const [showSenha, setShowSenha] = useState(false)
   const [form, setForm] = useState<WebsiteForm>(emptyForm)
 
-  const inputCls  = 'bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] text-sm h-9'
+  const inputCls  = 'bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] text-sm h-9'
   const labelCls  = 'text-[#B0B8C4] text-xs'
-  const selectCls = 'w-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-2 h-9 text-sm focus:outline-none focus:border-zinc-500'
+  const selectCls = 'w-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-2 h-9 text-sm focus:outline-none focus:border-zinc-500'
 
   function set<K extends keyof WebsiteForm>(key: K, value: WebsiteForm[K]) {
     setForm(p => ({ ...p, [key]: value }))
@@ -345,7 +345,7 @@ export function WebsiteManager({ clients }: { clients: ClientItem[] }) {
                     value={form.notas}
                     onChange={e => set('notas', e.target.value)}
                     placeholder="Informações adicionais sobre o site, instruções, alertas..."
-                    className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] text-sm min-h-[100px]"
+                    className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] text-sm min-h-[100px]"
                   />
                 </CardContent>
               </Card>

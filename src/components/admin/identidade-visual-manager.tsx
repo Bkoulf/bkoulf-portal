@@ -43,7 +43,7 @@ export function IdentidadeVisualManager({ clients }: { clients: ClientItem[] }) 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const supabase = createClient()
 
-  const selectCls = 'w-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-2 h-9 text-sm focus:outline-none focus:border-zinc-500'
+  const selectCls = 'w-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-2 h-9 text-sm focus:outline-none focus:border-zinc-500'
   const labelCls = 'text-[#B0B8C4] text-xs'
 
   // ── Fetch ─────────────────────────────────────────────────────────────────
@@ -212,7 +212,7 @@ export function IdentidadeVisualManager({ clients }: { clients: ClientItem[] }) 
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white text-base">Brandbook HTML</CardTitle>
                   {temArquivo && (
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] rounded-full">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.08)] rounded-full">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#D4A843]" />
                       <span className="text-[#D4A843] text-xs font-medium">Entregue</span>
                     </div>
@@ -223,8 +223,8 @@ export function IdentidadeVisualManager({ clients }: { clients: ClientItem[] }) 
 
                 {/* Arquivo já existe */}
                 {temArquivo && (
-                  <div className="flex items-center gap-4 p-4 bg-[#1C2333]/50 border border-[rgba(255,255,255,0.12)] rounded-xl">
-                    <div className="w-10 h-10 rounded-lg bg-[rgba(255,255,255,0.05)] flex items-center justify-center shrink-0">
+                  <div className="flex items-center gap-4 p-4 bg-[#18181B]/50 border border-[rgba(255,255,255,0.12)] rounded-xl">
+                    <div className="w-10 h-10 rounded-lg bg-[rgba(255,255,255,0.06)] flex items-center justify-center shrink-0">
                       <FileCode className="w-5 h-5 text-[#D4A843]" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -262,8 +262,8 @@ export function IdentidadeVisualManager({ clients }: { clients: ClientItem[] }) 
                   <div
                     className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center gap-3 cursor-pointer transition-all duration-200
                       ${isDragging
-                        ? 'border-[#D4A843] bg-[rgba(255,255,255,0.05)]'
-                        : 'border-[rgba(255,255,255,0.12)] hover:border-zinc-500 hover:bg-[#1C2333]/30'
+                        ? 'border-[#D4A843] bg-[rgba(255,255,255,0.06)]'
+                        : 'border-[rgba(255,255,255,0.12)] hover:border-zinc-500 hover:bg-[#18181B]/30'
                       }
                       ${uploading ? 'pointer-events-none' : ''}
                     `}
@@ -276,7 +276,7 @@ export function IdentidadeVisualManager({ clients }: { clients: ClientItem[] }) 
                       <>
                         <Loader2 className="w-10 h-10 text-[#D4A843] animate-spin" />
                         <p className="text-sm text-[#D0D8E4] font-medium">Enviando brandbook...</p>
-                        <div className="w-full max-w-xs bg-[#1C2333] rounded-full h-2 overflow-hidden">
+                        <div className="w-full max-w-xs bg-[#18181B] rounded-full h-2 overflow-hidden">
                           <div
                             className="bg-[#D4A843] h-2 rounded-full transition-all duration-500"
                             style={{ width: `${uploadProgress}%` }}

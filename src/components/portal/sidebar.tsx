@@ -49,13 +49,16 @@ function NavLink({ href, label, icon: Icon, isActive }: { href: string; label: s
     <Link
       href={href}
       className={cn(
-        'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
+        'relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150',
         isActive
-          ? 'bg-[rgba(255,255,255,0.05)] text-[#5BAFF5] border border-[rgba(45,125,210,0.3)]'
-          : 'text-[#B0B8C4] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border border-transparent'
+          ? 'bg-[rgba(45,125,210,0.12)] text-white'
+          : 'text-[#7AAAC8] hover:text-[#EBF4FF] hover:bg-[rgba(45,125,210,0.08)]'
       )}
     >
-      <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-[#2D7DD2]' : '')} />
+      {isActive && (
+        <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[#2D7DD2] rounded-r-full" />
+      )}
+      <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-[#2D7DD2]' : 'opacity-60')} />
       {label}
     </Link>
   )
@@ -74,9 +77,9 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="hidden lg:flex w-64 flex-col h-screen sticky top-0 border-r border-[rgba(255,255,255,0.08)]"
-      style={{ background: 'rgba(10,22,40,0.95)' }}>
-      <div className="flex items-center justify-center py-5 border-b border-[rgba(255,255,255,0.08)]">
+    <aside className="hidden lg:flex w-64 flex-col h-screen sticky top-0 border-r border-[rgba(45,125,210,0.15)]"
+      style={{ background: '#071525' }}>
+      <div className="flex items-center justify-center py-5 border-b border-[rgba(45,125,210,0.15)]">
         <Image
           src="/logo-full.jpg"
           alt="Bkoulf"
@@ -90,7 +93,7 @@ export function Sidebar() {
 
       <nav className="flex-1 overflow-y-auto scrollbar-none py-4 px-3 space-y-5">
         <div>
-          <p className="px-3 mb-2 text-[9px] font-bold text-white uppercase tracking-[3px]">
+          <p className="px-3 mb-2 text-[9px] font-bold text-white/30 uppercase tracking-[3px]">
             Ferramentas
           </p>
           <ul className="space-y-0.5">
@@ -103,7 +106,7 @@ export function Sidebar() {
         </div>
 
         <div>
-          <p className="px-3 mb-2 text-[9px] font-bold text-white uppercase tracking-[3px]">
+          <p className="px-3 mb-2 text-[9px] font-bold text-white/30 uppercase tracking-[3px]">
             Serviços
           </p>
           <ul className="space-y-0.5">
@@ -116,7 +119,7 @@ export function Sidebar() {
         </div>
 
         <div>
-          <p className="px-3 mb-2 text-[9px] font-bold text-white uppercase tracking-[3px]">
+          <p className="px-3 mb-2 text-[9px] font-bold text-white/30 uppercase tracking-[3px]">
             Ajuda
           </p>
           <ul className="space-y-0.5">
@@ -129,13 +132,14 @@ export function Sidebar() {
         </div>
       </nav>
 
-      <div className="px-3 py-3 border-t border-[rgba(255,255,255,0.08)] space-y-0.5">
+      <div className="px-3 py-3 border-t border-[rgba(45,125,210,0.15)] space-y-0.5">
         {bottomItems.map((item) => (
           <NavLink key={item.href} {...item} isActive={pathname === item.href} />
         ))}
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[rgba(176,184,196,0.7)] hover:bg-[rgba(255,77,77,0.08)] hover:text-[rgba(176,184,196,0.7)] w-full transition-all duration-200 border border-transparent"
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium w-full transition-all duration-150 hover:bg-[rgba(45,125,210,0.08)]"
+          style={{ color: 'rgba(176,184,196,0.45)' }}
         >
           <LogOut className="w-4 h-4 shrink-0" />
           Sair

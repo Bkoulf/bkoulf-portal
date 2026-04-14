@@ -31,7 +31,7 @@ interface VideoItem {
   cliente_id: string
   titulo: string
   descricao: string | null
-  status: 'pendente' | 'em_edicao' | 'entregue'
+  status: 'pendente' | 'em_edicao' | 'entregue' | 'aprovado' | 'reprovado'
   arquivo_url: string | null
   tamanho_arquivo: number | null
   resolucao: string
@@ -43,7 +43,6 @@ interface VideoForm {
   titulo: string
   descricao: string
   resolucao: '4K' | '1080p' | '720p'
-  status: 'pendente' | 'em_edicao' | 'entregue'
   arquivo_url: string
   tamanho_arquivo: string
   thumbnail_url: string
@@ -51,13 +50,15 @@ interface VideoForm {
 
 const emptyForm: VideoForm = {
   titulo: '', descricao: '', resolucao: '1080p',
-  status: 'pendente', arquivo_url: '', tamanho_arquivo: '', thumbnail_url: '',
+  arquivo_url: '', tamanho_arquivo: '', thumbnail_url: '',
 }
 
-const statusCfg = {
-  pendente:  { label: 'Pendente',  cls: 'text-[#B0B8C4]  bg-[rgba(255,255,255,0.1)]/60  border-[rgba(255,255,255,0.15)]',        dot: 'bg-zinc-500'   },
-  em_edicao: { label: 'Em edição', cls: 'text-[#D4A843] bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.08)]',                dot: 'bg-[#D4A843] animate-pulse'  },
-  entregue:  { label: 'Entregue',  cls: 'text-[#D4A843] bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.08)]', dot: 'bg-[#D4A843]' },
+const statusCfg: Record<string, { label: string; cls: string; dot: string }> = {
+  pendente:  { label: 'Pendente',  cls: 'text-[#B0B8C4] bg-[rgba(255,255,255,0.06)] border-[rgba(255,255,255,0.08)]', dot: 'bg-zinc-500' },
+  em_edicao: { label: 'Em edição', cls: 'text-[#D4A843] bg-[rgba(255,255,255,0.06)] border-[rgba(255,255,255,0.08)]', dot: 'bg-[#D4A843] animate-pulse' },
+  entregue:  { label: 'Entregue',  cls: 'text-[#D4A843] bg-[rgba(255,255,255,0.06)] border-[rgba(255,255,255,0.08)]', dot: 'bg-[#D4A843]' },
+  aprovado:  { label: 'Aprovado',  cls: 'text-green-400 bg-[rgba(34,197,94,0.08)] border-[rgba(34,197,94,0.15)]',    dot: 'bg-green-400' },
+  reprovado: { label: 'Reprovado', cls: 'text-red-400   bg-[rgba(239,68,68,0.08)]   border-[rgba(239,68,68,0.15)]',  dot: 'bg-red-400' },
 }
 
 function getCurrentDate(): string {
@@ -199,7 +200,7 @@ export function VideosManager({ clients }: { clients: ClientItem[] }) {
       titulo: form.titulo.trim(),
       descricao: form.descricao.trim() || null,
       resolucao: form.resolucao,
-      status: form.status,
+      status: 'entregue',
       arquivo_url: form.arquivo_url.trim() || null,
       tamanho_arquivo: form.tamanho_arquivo ? parseFloat(form.tamanho_arquivo) : null,
       thumbnail_url: form.thumbnail_url.trim() || null,
@@ -283,7 +284,6 @@ export function VideosManager({ clients }: { clients: ClientItem[] }) {
       titulo: video.titulo,
       descricao: video.descricao ?? '',
       resolucao: video.resolucao as '4K' | '1080p' | '720p',
-      status: video.status,
       arquivo_url: video.arquivo_url ?? '',
       tamanho_arquivo: video.tamanho_arquivo ? String(video.tamanho_arquivo) : '',
       thumbnail_url: video.thumbnail_url ?? '',
@@ -302,13 +302,11 @@ export function VideosManager({ clients }: { clients: ClientItem[] }) {
 
   // ── Counters ───────────────────────────────────────────────────────────────
 
-  const pendentes  = videos.filter(v => v.status === 'pendente').length
-  const emEdicao   = videos.filter(v => v.status === 'em_edicao').length
-  const entregues  = videos.filter(v => v.status === 'entregue').length
+  const entregues  = videos.filter(v => v.status === 'entregue' || v.status === 'aprovado').length
 
-  const inputCls  = 'bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] text-sm h-9'
+  const inputCls  = 'bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] text-sm h-9'
   const labelCls  = 'text-[#B0B8C4] text-xs'
-  const selectCls = 'w-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-2 h-9 text-sm focus:outline-none focus:border-zinc-500'
+  const selectCls = 'w-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-2 h-9 text-sm focus:outline-none focus:border-zinc-500'
 
   return (
     <div className="space-y-6">
@@ -392,12 +390,6 @@ export function VideosManager({ clients }: { clients: ClientItem[] }) {
                   {/* Counters summary */}
                   {videos.length > 0 && (
                     <div className="flex items-center gap-4 pt-2 border-t border-[rgba(255,255,255,0.08)]">
-                      <div className="flex items-center gap-1.5 text-xs text-[rgba(176,184,196,0.6)]">
-                        <span className="w-2 h-2 rounded-full bg-zinc-500" />{pendentes} pendentes
-                      </div>
-                      <div className="flex items-center gap-1.5 text-xs text-[#D4A843]/70">
-                        <span className="w-2 h-2 rounded-full bg-[#D4A843] animate-pulse" />{emEdicao} em edição
-                      </div>
                       <div className="flex items-center gap-1.5 text-xs text-[#D4A843]/70">
                         <span className="w-2 h-2 rounded-full bg-[#D4A843]" />{entregues} entregues
                       </div>
@@ -439,7 +431,7 @@ export function VideosManager({ clients }: { clients: ClientItem[] }) {
                 <CardContent>
                   {videos.length === 0 ? (
                     <div className="flex flex-col items-center py-12 gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-[#1C2333] flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-xl bg-[#18181B] flex items-center justify-center">
                         <Film className="w-6 h-6 text-[rgba(176,184,196,0.4)]" />
                       </div>
                       <p className="text-[rgba(176,184,196,0.6)] text-sm">Nenhum vídeo cadastrado. Clique em &quot;Adicionar vídeo&quot;.</p>
@@ -449,7 +441,7 @@ export function VideosManager({ clients }: { clients: ClientItem[] }) {
                       {videos.map(video => {
                         const cfg = statusCfg[video.status]
                         return (
-                          <div key={video.id} className="flex items-center gap-3 p-3 bg-[#1C2333]/50 rounded-xl border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.12)] transition-colors">
+                          <div key={video.id} className="flex items-center gap-3 p-3 bg-[#18181B]/50 rounded-xl border border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.12)] transition-colors">
                             {/* Thumbnail */}
                             <div className="w-14 h-10 bg-[rgba(255,255,255,0.1)] rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
                               {video.thumbnail_url
@@ -465,16 +457,11 @@ export function VideosManager({ clients }: { clients: ClientItem[] }) {
                               <p className="text-[rgba(176,184,196,0.6)] text-xs">{video.resolucao}{video.tamanho_arquivo ? ` · ${video.tamanho_arquivo} MB` : ''}</p>
                             </div>
 
-                            {/* Status selector */}
-                            <select
-                              value={video.status}
-                              onChange={e => handleStatusChange(video, e.target.value as VideoItem['status'])}
-                              className={`text-xs px-2 py-1 rounded-lg border cursor-pointer focus:outline-none bg-transparent ${cfg.cls}`}
-                            >
-                              <option value="pendente"  className="bg-[rgba(255,255,255,0.04)] text-white">Pendente</option>
-                              <option value="em_edicao" className="bg-[rgba(255,255,255,0.04)] text-white">Em edição</option>
-                              <option value="entregue"  className="bg-[rgba(255,255,255,0.04)] text-white">Entregue</option>
-                            </select>
+                            {/* Status badge */}
+                            <span className={`text-xs px-2.5 py-1 rounded-lg border flex items-center gap-1.5 shrink-0 ${cfg.cls}`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`} />
+                              {cfg.label}
+                            </span>
 
                             {/* Actions */}
                             <div className="flex items-center gap-1 shrink-0">
@@ -531,36 +518,22 @@ export function VideosManager({ clients }: { clients: ClientItem[] }) {
                 value={form.descricao}
                 onChange={e => setForm(p => ({ ...p, descricao: e.target.value }))}
                 placeholder="Detalhes sobre o vídeo..."
-                className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] text-sm min-h-[70px]"
+                className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] text-sm min-h-[70px]"
               />
             </div>
 
-            {/* Resolution + Status */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label className={labelCls}>Resolução</Label>
-                <select
-                  value={form.resolucao}
-                  onChange={e => setForm(p => ({ ...p, resolucao: e.target.value as VideoForm['resolucao'] }))}
-                  className={selectCls}
-                >
-                  <option value="4K">4K</option>
-                  <option value="1080p">1080p</option>
-                  <option value="720p">720p</option>
-                </select>
-              </div>
-              <div className="space-y-1.5">
-                <Label className={labelCls}>Status inicial</Label>
-                <select
-                  value={form.status}
-                  onChange={e => setForm(p => ({ ...p, status: e.target.value as VideoForm['status'] }))}
-                  className={selectCls}
-                >
-                  <option value="pendente">Pendente</option>
-                  <option value="em_edicao">Em edição</option>
-                  <option value="entregue">Entregue</option>
-                </select>
-              </div>
+            {/* Resolution */}
+            <div className="space-y-1.5">
+              <Label className={labelCls}>Resolução</Label>
+              <select
+                value={form.resolucao}
+                onChange={e => setForm(p => ({ ...p, resolucao: e.target.value as VideoForm['resolucao'] }))}
+                className={selectCls}
+              >
+                <option value="4K">4K</option>
+                <option value="1080p">1080p</option>
+                <option value="720p">720p</option>
+              </select>
             </div>
 
             {/* Arquivo: link ou upload */}
@@ -626,7 +599,7 @@ export function VideosManager({ clients }: { clients: ClientItem[] }) {
                     <>
                       <Loader2 className="w-8 h-8 text-[#D4A843] animate-spin" />
                       <p className="text-sm text-[#B0B8C4]">Enviando arquivo...</p>
-                      <div className="w-full bg-[#1C2333] rounded-full h-1.5">
+                      <div className="w-full bg-[#18181B] rounded-full h-1.5">
                         <div
                           className="bg-[#D4A843] h-1.5 rounded-full transition-all duration-500"
                           style={{ width: `${uploadProgress}%` }}

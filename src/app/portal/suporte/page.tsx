@@ -24,7 +24,7 @@ const canais = [
   {
     label: 'Instagram',
     descricao: '@bkoulf',
-    href: 'https://instagram.com/SEU_PERFIL',
+    href: 'https://www.instagram.com/bkoulf',
     icon: InstagramIcon,
     iconClass: 'text-pink-400',
     bg: 'bg-pink-500/10',

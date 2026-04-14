@@ -339,7 +339,7 @@ export function EdicaoVideosClient({ contrato, videos: initialVideos }: Props) {
   const totalCombinado = contrato?.total_combinado ?? 0
   const dataEntrega = contrato?.data_entrega ?? null
 
-  const entregues  = videos.filter(v => v.status === 'aprovado').length
+  const entregues  = videos.filter(v => v.status === 'entregue' || v.status === 'aprovado').length
   const emEdicao   = videos.filter(v => v.status === 'em_edicao').length
   const pendentes  = videos.filter(v => v.status === 'pendente').length
   const progressPct = totalCombinado > 0 ? Math.min((entregues / totalCombinado) * 100, 100) : 0
@@ -442,8 +442,6 @@ export function EdicaoVideosClient({ contrato, videos: initialVideos }: Props) {
           )}
         </div>
 
-        <ContactServiceBanner service="Edição de Vídeos" />
-
         {noVideos ? (
           /* Empty state */
           <div className="flex flex-col items-center justify-center py-20 gap-4 bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl">
@@ -463,6 +461,8 @@ export function EdicaoVideosClient({ contrato, videos: initialVideos }: Props) {
           </div>
         )}
       </div>
+
+      <ContactServiceBanner service="Edição de Vídeos" />
     </div>
   )
 }

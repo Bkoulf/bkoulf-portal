@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { Sidebar } from '@/components/portal/sidebar'
 import { Header } from '@/components/portal/header'
+import { PortalTopbar } from '@/components/portal/topbar'
 import { MobileBottomNav } from '@/components/portal/mobile-bottom-nav'
 import { AlertTriangle } from 'lucide-react'
 
@@ -50,14 +51,18 @@ export default async function PortalLayout({
   }
 
   return (
-    <div className="flex h-screen bg-zinc-900 overflow-hidden">
+    <div className="flex h-dvh bg-zinc-900 overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header
           userName={profile?.full_name ?? user.email ?? 'Usuário'}
           userEmail={profile?.email ?? user.email ?? ''}
         />
-        <main className="flex-1 overflow-y-auto p-4 pb-20 lg:p-6 lg:pb-6">
+        <PortalTopbar
+          userName={profile?.full_name ?? user.email ?? 'Usuário'}
+          userEmail={profile?.email ?? user.email ?? ''}
+        />
+        <main className="flex-1 overflow-y-auto p-4 lg:p-6" style={{ paddingBottom: 'calc(5rem + env(safe-area-inset-bottom))' }}>
           {children}
         </main>
       </div>

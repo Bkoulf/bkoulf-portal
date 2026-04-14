@@ -128,7 +128,7 @@ export function RelatoriosManager({ clients, reports: initial }: { clients: Clie
           <form onSubmit={handleCreate} className="space-y-4 mt-2">
             <div className="space-y-1.5">
               <Label className="text-[#D0D8E4]">Cliente *</Label>
-              <select value={form.clientId} onChange={e => setForm(p => ({ ...p, clientId: e.target.value }))} required className="w-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-3 py-2 text-sm focus:outline-none">
+              <select value={form.clientId} onChange={e => setForm(p => ({ ...p, clientId: e.target.value }))} required className="w-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-3 py-2 text-sm focus:outline-none">
                 <option value="">Selecione</option>
                 {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
@@ -136,7 +136,7 @@ export function RelatoriosManager({ clients, reports: initial }: { clients: Clie
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label className="text-[#D0D8E4]">Serviço *</Label>
-                <select value={form.serviceType} onChange={e => setForm(p => ({ ...p, serviceType: e.target.value }))} className="w-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-3 py-2 text-sm focus:outline-none">
+                <select value={form.serviceType} onChange={e => setForm(p => ({ ...p, serviceType: e.target.value }))} className="w-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-3 py-2 text-sm focus:outline-none">
                   {Object.entries(serviceLabels).map(([key, label]) => (
                     <option key={key} value={key}>{label}</option>
                   ))}
@@ -144,16 +144,16 @@ export function RelatoriosManager({ clients, reports: initial }: { clients: Clie
               </div>
               <div className="space-y-1.5">
                 <Label className="text-[#D0D8E4]">Período *</Label>
-                <Input value={form.period} onChange={e => setForm(p => ({ ...p, period: e.target.value }))} required placeholder="Ex: Março 2026" className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]" />
+                <Input value={form.period} onChange={e => setForm(p => ({ ...p, period: e.target.value }))} required placeholder="Ex: Março 2026" className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]" />
               </div>
             </div>
             <div className="space-y-1.5">
               <Label className="text-[#D0D8E4]">Título *</Label>
-              <Input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required placeholder="Ex: Relatório de Performance - Março" className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]" />
+              <Input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required placeholder="Ex: Relatório de Performance - Março" className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]" />
             </div>
             <div className="space-y-1.5">
               <Label className="text-[#D0D8E4]">Link do relatório</Label>
-              <Input value={form.fileUrl} onChange={e => setForm(p => ({ ...p, fileUrl: e.target.value }))} placeholder="https://..." className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]" />
+              <Input value={form.fileUrl} onChange={e => setForm(p => ({ ...p, fileUrl: e.target.value }))} placeholder="https://..." className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]" />
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="outline" className="border-[rgba(255,255,255,0.12)] text-[#D0D8E4]" onClick={() => setShowNew(false)}>Cancelar</Button>

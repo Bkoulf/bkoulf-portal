@@ -1,19 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 import {
   LogOut, User, Menu, X,
@@ -65,13 +57,16 @@ function NavSection({ title, items, pathname, onClose }: {
                 href={item.href}
                 onClick={onClose}
                 className={cn(
-                  'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
+                  'relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150',
                   isActive
-                    ? 'bg-[rgba(45,125,210,0.12)] text-[#2D7DD2] border border-[rgba(45,125,210,0.2)]'
-                    : 'text-[#B0B8C4] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border border-transparent'
+                    ? 'bg-[rgba(45,125,210,0.12)] text-white'
+                    : 'text-[#B0B8C4] hover:text-white hover:bg-[rgba(255,255,255,0.05)]'
                 )}
               >
-                <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-[#2D7DD2]' : '')} />
+                {isActive && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[#2D7DD2] rounded-r-full" />
+                )}
+                <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-[#2D7DD2]' : 'opacity-60')} />
                 {item.label}
               </Link>
             </li>
@@ -84,9 +79,25 @@ function NavSection({ title, items, pathname, onClose }: {
 
 export function Header({ userName, userEmail }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
+  const profileRef = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
+
+  useEffect(() => {
+    function handleOutside(e: MouseEvent | TouchEvent) {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleOutside)
+    document.addEventListener('touchstart', handleOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleOutside)
+      document.removeEventListener('touchstart', handleOutside)
+    }
+  }, [])
 
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -107,9 +118,8 @@ export function Header({ userName, userEmail }: HeaderProps) {
       <header
         className="lg:hidden h-14 flex items-center justify-between px-4 shrink-0"
         style={{
-          background: 'rgba(5,10,20,0.95)',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
-          backdropFilter: 'blur(12px)',
+          background: '#071525',
+          borderBottom: '1px solid rgba(45,125,210,0.18)',
         }}
       >
         {/* Hamburger (mobile only) */}
@@ -135,44 +145,43 @@ export function Header({ userName, userEmail }: HeaderProps) {
         <div className="hidden lg:block" />
 
         {/* Avatar + dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center gap-2 outline-none">
+        <div ref={profileRef} className="relative">
+          <button
+            onClick={() => setProfileOpen(v => !v)}
+            className="flex items-center gap-2 outline-none"
+          >
             <Avatar className="w-8 h-8">
               <AvatarFallback className="bg-[rgba(255,255,255,0.1)] text-white text-xs font-semibold">
                 {initials}
               </AvatarFallback>
             </Avatar>
-            <div className="text-left hidden sm:block">
-              <p className="text-sm font-medium text-white leading-none">{userName}</p>
-              <p className="text-xs text-[#B0B8C4] mt-0.5">{userEmail}</p>
+          </button>
+
+          {profileOpen && (
+            <div
+              className="fixed right-4 z-50 min-w-[180px] rounded-lg p-1 shadow-xl"
+              style={{ top: '3.75rem', background: 'rgba(10,16,28,0.98)', border: '1px solid rgba(45,125,210,0.18)' }}
+            >
+              <p className="px-3 py-2 text-xs text-[#B0B8C4]">{userEmail}</p>
+              <div className="h-px bg-[rgba(45,125,210,0.18)] mx-1 my-1" />
+              <button
+                onClick={() => { setProfileOpen(false); router.push('/portal/perfil') }}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm text-[#B0B8C4] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+              >
+                <User className="w-4 h-4" />
+                Meu Perfil
+              </button>
+              <div className="h-px bg-[rgba(45,125,210,0.18)] mx-1 my-1" />
+              <button
+                onClick={() => { setProfileOpen(false); handleLogout() }}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm text-[rgba(176,184,196,0.7)] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                Sair
+              </button>
             </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            style={{ background: 'rgba(10,16,28,0.98)', border: '1px solid rgba(255,255,255,0.08)' }}
-            className="text-white min-w-[180px]"
-          >
-            <DropdownMenuLabel className="text-[#B0B8C4] font-normal text-xs">
-              {userEmail}
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator className="bg-[rgba(255,255,255,0.08)]" />
-            <DropdownMenuItem
-              onClick={() => router.push('/portal/perfil')}
-              className="hover:bg-[rgba(255,255,255,0.05)] cursor-pointer gap-2 text-[#B0B8C4] hover:text-white"
-            >
-              <User className="w-4 h-4" />
-              Meu Perfil
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-[rgba(255,255,255,0.08)]" />
-            <DropdownMenuItem
-              onClick={handleLogout}
-              className="hover:bg-[rgba(255,255,255,0.05)] cursor-pointer gap-2 text-[rgba(176,184,196,0.7)] hover:text-white"
-            >
-              <LogOut className="w-4 h-4" />
-              Sair
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          )}
+        </div>
       </header>
 
       {/* Mobile drawer overlay */}
@@ -188,14 +197,14 @@ export function Header({ userName, userEmail }: HeaderProps) {
           <div
             className="absolute left-0 top-0 h-full w-72 flex flex-col shadow-2xl"
             style={{
-              background: 'rgba(5,10,20,0.98)',
-              borderRight: '1px solid rgba(255,255,255,0.08)',
+              background: 'rgba(7,21,37,0.99)',
+              borderRight: '1px solid rgba(45,125,210,0.18)',
             }}
           >
             {/* Logo + fechar */}
             <div
               className="flex items-center justify-between px-4 py-4"
-              style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}
+              style={{ borderBottom: '1px solid rgba(45,125,210,0.18)' }}
             >
               <Image
                 src="/logo-full.jpg"
@@ -224,7 +233,7 @@ export function Header({ userName, userEmail }: HeaderProps) {
             {/* Perfil + Sair */}
             <div
               className="px-3 py-4 space-y-0.5"
-              style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
+              style={{ borderTop: '1px solid rgba(45,125,210,0.18)' }}
             >
               <Link
                 href="/portal/perfil"

@@ -1,4 +1,5 @@
 import { Zap, Palette, Video, Globe, TrendingUp, ArrowRight, MessageCircle, ShieldCheck, TrendingUp as Growth } from 'lucide-react'
+import { ContactServiceBanner } from '@/components/portal/contact-service-banner'
 
 const WHATSAPP_NUMBER = '5511999999999'
 const WHATSAPP_MESSAGE = encodeURIComponent('Olá! Quero saber mais sobre o Método BK4 e como ele pode transformar minha presença digital.')
@@ -194,6 +195,8 @@ export default function MetodoBK4Page() {
           </a>
         </div>
       </div>
+
+      <ContactServiceBanner service="Método BK4" />
 
     </div>
   )

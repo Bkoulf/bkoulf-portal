@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import {
   Menu, X, LogOut,
   Users, LayoutDashboard, PackageCheck, Calendar,
-  TrendingUp, Video, Palette, Monitor, Bot, UserCircle,
+  TrendingUp, Video, Palette, Monitor, Bot, UserCircle, Crosshair,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -22,6 +22,7 @@ const navItems = [
   { href: '/admin/videos',             label: 'Edição de Vídeos',  icon: Video },
   { href: '/admin/website',            label: 'Website',           icon: Monitor },
   { href: '/admin/trafego-pago',       label: 'Tráfego Pago',      icon: TrendingUp },
+  { href: '/admin/leads',              label: 'Leads',             icon: Crosshair },
   { href: '/admin/assistente',         label: 'Bk Assistant',      icon: Bot },
   { href: '/admin/perfil',             label: 'Meu Perfil',        icon: UserCircle },
 ]
@@ -49,9 +50,8 @@ export function AdminMobileHeader({ userName }: Props) {
       <header
         className="lg:hidden h-14 flex items-center justify-between px-4 shrink-0"
         style={{
-          background: 'rgba(5,10,20,0.97)',
-          borderBottom: '1px solid rgba(212,168,67,0.15)',
-          backdropFilter: 'blur(12px)',
+          background: '#0D0D0F',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
         }}
       >
         <button
@@ -97,8 +97,8 @@ export function AdminMobileHeader({ userName }: Props) {
           <div
             className="absolute left-0 top-0 h-full w-72 flex flex-col shadow-2xl"
             style={{
-              background: 'rgba(5,10,20,0.99)',
-              borderRight: '1px solid rgba(212,168,67,0.12)',
+              background: '#0D0D0F',
+              borderRight: '1px solid rgba(255,255,255,0.08)',
             }}
           >
             {/* Logo + close */}
@@ -143,14 +143,16 @@ export function AdminMobileHeader({ userName }: Props) {
                         href={item.href}
                         onClick={() => setOpen(false)}
                         className={cn(
-                          'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
+                          'relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150',
                           isActive
-                            ? 'text-[#D4A843] border border-[rgba(212,168,67,0.3)]'
-                            : 'text-[#B0B8C4] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border border-transparent'
+                            ? 'bg-[rgba(212,168,67,0.1)] text-white'
+                            : 'text-[#8B9AAB] hover:text-white hover:bg-[rgba(255,255,255,0.05)]'
                         )}
-                        style={isActive ? { background: 'rgba(212,168,67,0.08)' } : {}}
                       >
-                        <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-[#D4A843]' : '')} />
+                        {isActive && (
+                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[#D4A843] rounded-r-full" />
+                        )}
+                        <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-[#D4A843]' : 'opacity-60')} />
                         {item.label}
                       </Link>
                     </li>

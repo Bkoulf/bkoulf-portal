@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import {
   LayoutDashboard, Users, PackageCheck, Calendar, Bot,
   Menu, X, LogOut, TrendingUp, Video, Palette, Monitor,
-  UserCircle, PackageCheck as Entregas,
+  UserCircle, Crosshair,
 } from 'lucide-react'
 
 const navItems = [
@@ -21,16 +21,17 @@ const navItems = [
   { href: '/admin/videos',            label: 'Edição de Vídeos',  icon: Video },
   { href: '/admin/website',           label: 'Website',           icon: Monitor },
   { href: '/admin/trafego-pago',      label: 'Tráfego Pago',      icon: TrendingUp },
+  { href: '/admin/leads',             label: 'Leads',             icon: Crosshair },
   { href: '/admin/assistente',        label: 'Bk Assistant',      icon: Bot },
   { href: '/admin/perfil',            label: 'Meu Perfil',        icon: UserCircle },
 ]
 
 const bottomItems = [
-  { href: '/admin',            label: 'Geral',    icon: LayoutDashboard },
-  { href: '/admin/clientes',   label: 'Clientes', icon: Users },
-  { href: '/admin/entregas',   label: 'Entregas', icon: PackageCheck },
-  { href: '/admin/calendario', label: 'Agenda',   icon: Calendar },
-  { href: '/admin/assistente', label: 'Assistant',icon: Bot },
+  { href: '/admin',            label: 'Geral',     icon: LayoutDashboard },
+  { href: '/admin/clientes',   label: 'Clientes',  icon: Users },
+  { href: '/admin/entregas',   label: 'Entregas',  icon: PackageCheck },
+  { href: '/admin/calendario', label: 'Agenda',    icon: Calendar },
+  { href: '/admin/assistente', label: 'Assistant', icon: Bot },
 ]
 
 export function AdminMobileBottomNav() {
@@ -48,17 +49,43 @@ export function AdminMobileBottomNav() {
       {/* Drawer overlay */}
       {drawerOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setDrawerOpen(false)} />
+          <div
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setDrawerOpen(false)}
+          />
           <div
             className="absolute left-0 top-0 h-full w-72 flex flex-col shadow-2xl"
-            style={{ background: 'rgba(5,10,20,0.99)', borderRight: '1px solid rgba(212,168,67,0.12)' }}
+            style={{ background: '#0D0D0F', borderRight: '1px solid rgba(255,255,255,0.08)' }}
           >
-            <div className="flex items-center justify-between px-4 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+            <div
+              className="flex items-center justify-between px-4 py-4"
+              style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}
+            >
               <div className="flex items-center gap-2">
-                <Image src="/logo-full.jpg" alt="Bkoulf" width={100} height={40} className="object-contain" style={{ mixBlendMode: 'screen' }} />
-                <span className="text-[9px] font-bold tracking-[2px] uppercase text-[#D4A843]">Admin</span>
+                <Image
+                  src="/logo-full.jpg"
+                  alt="Bkoulf"
+                  width={100}
+                  height={40}
+                  className="object-contain"
+                  style={{ mixBlendMode: 'screen' }}
+                />
+                <span
+                  className="text-[9px] font-bold tracking-[2px] uppercase px-1.5 py-0.5 rounded"
+                  style={{
+                    color: '#D4A843',
+                    background: 'rgba(212,168,67,0.1)',
+                    border: '1px solid rgba(212,168,67,0.2)',
+                  }}
+                >
+                  Admin
+                </span>
               </div>
-              <button onClick={() => setDrawerOpen(false)} className="w-8 h-8 flex items-center justify-center rounded-lg text-[#B0B8C4] hover:text-white" style={{ background: 'rgba(255,255,255,0.05)' }}>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-lg text-[#B0B8C4] hover:text-white transition-colors"
+                style={{ background: 'rgba(255,255,255,0.05)' }}
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -74,14 +101,16 @@ export function AdminMobileBottomNav() {
                         href={item.href}
                         onClick={() => setDrawerOpen(false)}
                         className={cn(
-                          'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 border',
+                          'relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150',
                           isActive
-                            ? 'text-[#D4A843] border-[rgba(212,168,67,0.3)]'
-                            : 'text-[#B0B8C4] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border-transparent'
+                            ? 'bg-[rgba(212,168,67,0.1)] text-white'
+                            : 'text-[#8B9AAB] hover:text-white hover:bg-[rgba(255,255,255,0.05)]'
                         )}
-                        style={isActive ? { background: 'rgba(212,168,67,0.08)' } : {}}
                       >
-                        <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-[#D4A843]' : '')} />
+                        {isActive && (
+                          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[#D4A843] rounded-r-full" />
+                        )}
+                        <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-[#D4A843]' : 'opacity-60')} />
                         {item.label}
                       </Link>
                     </li>
@@ -89,6 +118,19 @@ export function AdminMobileBottomNav() {
                 })}
               </ul>
             </nav>
+
+            <div
+              className="px-3 py-4"
+              style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
+            >
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[rgba(176,184,196,0.6)] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-all"
+              >
+                <LogOut className="w-4 h-4 shrink-0" />
+                Sair
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -97,14 +139,14 @@ export function AdminMobileBottomNav() {
       <nav
         className="lg:hidden fixed bottom-0 left-0 right-0 z-40"
         style={{
-          background: 'rgba(5,10,20,0.97)',
-          borderTop: '1px solid rgba(212,168,67,0.12)',
+          background: 'rgba(10,10,14,0.97)',
+          borderTop: '1px solid rgba(212,168,67,0.18)',
           backdropFilter: 'blur(20px)',
           paddingBottom: 'env(safe-area-inset-bottom)',
         }}
       >
         <ul className="flex items-stretch h-16">
-          {/* Botão sair — esquerda */}
+          {/* Sair — esquerda */}
           <li className="flex-1">
             <button
               onClick={handleLogout}
@@ -130,8 +172,11 @@ export function AdminMobileBottomNav() {
                     isActive ? 'text-[#D4A843]' : 'text-[rgba(176,184,196,0.5)]'
                   )}
                 >
-                  <div className={cn('flex items-center justify-center w-8 h-6 rounded-lg transition-all duration-200', isActive && 'bg-[rgba(212,168,67,0.12)]')}>
-                    <Icon className={cn('w-5 h-5 transition-transform duration-200', isActive && 'scale-110')} />
+                  <div className={cn(
+                    'flex items-center justify-center w-8 h-6 rounded-lg transition-all duration-200',
+                    isActive && 'bg-[rgba(212,168,67,0.15)]'
+                  )}>
+                    <Icon className="w-5 h-5" />
                   </div>
                   <span className="text-[10px] font-medium leading-none">{item.label}</span>
                 </Link>

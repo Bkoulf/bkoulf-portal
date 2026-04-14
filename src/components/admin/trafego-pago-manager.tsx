@@ -207,9 +207,9 @@ export function TrafegoPagoManager({ clients }: { clients: ClientItem[] }) {
     setCriativos(prev => prev.map((c, idx) => idx === i ? { ...c, [field]: value } : c))
   }
 
-  const inputCls = 'bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] text-sm h-9'
+  const inputCls = 'bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] text-sm h-9'
   const labelCls = 'text-[#B0B8C4] text-xs'
-  const selectCls = 'w-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-2 h-9 text-sm focus:outline-none focus:border-zinc-500'
+  const selectCls = 'w-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-2 h-9 text-sm focus:outline-none focus:border-zinc-500'
 
   return (
     <div className="space-y-6">
@@ -271,7 +271,7 @@ export function TrafegoPagoManager({ clients }: { clients: ClientItem[] }) {
             </div>
           ) : (
             <Tabs defaultValue="metricas">
-              <TabsList className="bg-[#1C2333] border border-[rgba(255,255,255,0.12)] mb-4">
+              <TabsList className="bg-[#18181B] border border-[rgba(255,255,255,0.12)] mb-4">
                 <TabsTrigger value="metricas" className="data-active:bg-[rgba(255,255,255,0.1)] data-active:text-white text-[#B0B8C4] text-sm">
                   Métricas
                 </TabsTrigger>
@@ -396,7 +396,7 @@ export function TrafegoPagoManager({ clients }: { clients: ClientItem[] }) {
                       <p className="text-[rgba(176,184,196,0.6)] text-sm">Nenhuma campanha adicionada. Clique em &quot;Adicionar&quot; para começar.</p>
                     ) : (
                       campanhas.map((c, i) => (
-                        <div key={i} className="bg-[#1C2333] rounded-lg p-4 space-y-3">
+                        <div key={i} className="bg-[#18181B] rounded-lg p-4 space-y-3">
                           <div className="flex items-center justify-between">
                             <span className="text-xs text-[#B0B8C4] font-medium">Campanha {i + 1}</span>
                             <button
@@ -494,7 +494,7 @@ export function TrafegoPagoManager({ clients }: { clients: ClientItem[] }) {
                       <p className="text-[rgba(176,184,196,0.6)] text-sm">Nenhum criativo adicionado. Clique em &quot;Adicionar&quot; para começar.</p>
                     ) : (
                       criativos.map((c, i) => (
-                        <div key={i} className="bg-[#1C2333] rounded-lg p-4 space-y-3">
+                        <div key={i} className="bg-[#18181B] rounded-lg p-4 space-y-3">
                           <div className="flex items-center justify-between">
                             <span className="text-xs text-[#B0B8C4] font-medium">Criativo #{i + 1}</span>
                             <button

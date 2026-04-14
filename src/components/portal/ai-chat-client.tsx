@@ -107,7 +107,7 @@ export function AiChatClient({ firstName }: { firstName: string }) {
   const isEmpty = messages.length === 0
 
   return (
-    <div className="flex flex-col h-full min-h-[calc(100vh-10rem)]">
+    <div className="flex flex-col h-full min-h-0">
 
       {/* Header */}
       <div className="flex items-center justify-between gap-3 mb-4">

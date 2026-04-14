@@ -21,10 +21,10 @@ const serviceLabels: Record<string, string> = {
 }
 
 const statusColors: Record<string, string> = {
-  aguardando_aprovacao: 'bg-[rgba(255,255,255,0.05)] text-[#B0B8C4] border-[rgba(255,255,255,0.08)]',
-  aprovado: 'bg-[rgba(255,255,255,0.05)] text-[#D4A843] border-[rgba(255,255,255,0.08)]',
-  ajuste_solicitado: 'bg-[rgba(255,255,255,0.05)] text-[#B0B8C4] border-[rgba(255,255,255,0.08)]',
-  entregue: 'bg-[rgba(255,255,255,0.05)] text-[#D4A843] border-[rgba(255,255,255,0.08)]',
+  aguardando_aprovacao: 'bg-[rgba(255,255,255,0.06)] text-[#B0B8C4] border-[rgba(255,255,255,0.08)]',
+  aprovado: 'bg-[rgba(255,255,255,0.06)] text-[#D4A843] border-[rgba(255,255,255,0.08)]',
+  ajuste_solicitado: 'bg-[rgba(255,255,255,0.06)] text-[#B0B8C4] border-[rgba(255,255,255,0.08)]',
+  entregue: 'bg-[rgba(255,255,255,0.06)] text-[#D4A843] border-[rgba(255,255,255,0.08)]',
 }
 
 const statusLabels: Record<string, string> = {
@@ -169,7 +169,7 @@ export function EntregasManager({ clients, services, deliverables: initialDelive
                 value={selectedClientId}
                 onChange={e => { setSelectedClientId(e.target.value); setForm(p => ({ ...p, serviceId: '' })) }}
                 required
-                className="w-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
+                className="w-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
               >
                 <option value="">Selecione o cliente</option>
                 {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -183,7 +183,7 @@ export function EntregasManager({ clients, services, deliverables: initialDelive
                   value={form.serviceId}
                   onChange={e => setForm(p => ({ ...p, serviceId: e.target.value }))}
                   required
-                  className="w-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
+                  className="w-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
                 >
                   <option value="">Selecione o serviço</option>
                   {clientServices.map(s => (
@@ -198,22 +198,22 @@ export function EntregasManager({ clients, services, deliverables: initialDelive
 
             <div className="space-y-1.5">
               <Label className="text-[#D0D8E4]">Título *</Label>
-              <Input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required placeholder="Ex: Arte para Instagram - Semana 1" className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]" />
+              <Input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} required placeholder="Ex: Arte para Instagram - Semana 1" className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]" />
             </div>
 
             <div className="space-y-1.5">
               <Label className="text-[#D0D8E4]">Descrição</Label>
-              <Textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Detalhes sobre a entrega..." className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] min-h-[80px]" />
+              <Textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Detalhes sobre a entrega..." className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] min-h-[80px]" />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label className="text-[#D0D8E4]">Link do arquivo</Label>
-                <Input value={form.fileUrl} onChange={e => setForm(p => ({ ...p, fileUrl: e.target.value }))} placeholder="https://..." className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]" />
+                <Input value={form.fileUrl} onChange={e => setForm(p => ({ ...p, fileUrl: e.target.value }))} placeholder="https://..." className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]" />
               </div>
               <div className="space-y-1.5">
                 <Label className="text-[#D0D8E4]">Prazo</Label>
-                <Input type="date" value={form.dueDate} onChange={e => setForm(p => ({ ...p, dueDate: e.target.value }))} className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white" />
+                <Input type="date" value={form.dueDate} onChange={e => setForm(p => ({ ...p, dueDate: e.target.value }))} className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white" />
               </div>
             </div>
 

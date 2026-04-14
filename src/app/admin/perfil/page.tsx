@@ -1,12 +1,14 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { UserCircle, Loader2, Camera, ShieldCheck } from 'lucide-react'
+import { UserCircle, Loader2, Camera, ShieldCheck, ArrowRightLeft } from 'lucide-react'
 import { toast } from 'sonner'
 
 export default function AdminPerfilPage() {
+  const router = useRouter()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
@@ -204,6 +206,33 @@ export default function AdminPerfilPage() {
           )}
         </div>
       </div>
+      {/* Trocar de conta */}
+      <div
+        className="flex items-center justify-between gap-4 p-5 rounded-2xl"
+        style={{ background: 'rgba(212,168,67,0.06)', border: '1px solid rgba(212,168,67,0.15)' }}
+      >
+        <div className="flex items-start gap-3">
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+            style={{ background: 'rgba(212,168,67,0.12)' }}
+          >
+            <ArrowRightLeft className="w-4 h-4 text-[#D4A843]" />
+          </div>
+          <div>
+            <p className="text-white text-sm font-semibold">Trocar de conta</p>
+            <p className="text-[rgba(176,184,196,0.6)] text-xs mt-0.5">Acessar o portal do cliente com sua conta.</p>
+          </div>
+        </div>
+        <button
+          onClick={() => router.push('/portal/dashboard')}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all shrink-0 whitespace-nowrap hover:opacity-90 active:scale-95"
+          style={{ background: 'rgba(212,168,67,0.15)', color: '#D4A843', border: '1px solid rgba(212,168,67,0.25)' }}
+        >
+          <ArrowRightLeft className="w-4 h-4" />
+          Ir para o portal
+        </button>
+      </div>
+
     </div>
   )
 }

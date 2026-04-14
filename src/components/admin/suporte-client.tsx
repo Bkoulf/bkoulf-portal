@@ -98,7 +98,7 @@ export function AdminSuporteClient({ clients, adminId, adminName }: {
                       className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                         selectedClient?.id === client.id
                           ? 'bg-[#D4A843] text-[#050A14]'
-                          : 'text-[#B0B8C4] hover:text-white hover:bg-[#1C2333]'
+                          : 'text-[#B0B8C4] hover:text-white hover:bg-[#18181B]'
                       }`}
                     >
                       {client.name}
@@ -136,7 +136,7 @@ export function AdminSuporteClient({ clients, adminId, adminName }: {
                           <div className={`max-w-[75%] rounded-2xl px-4 py-2.5 ${
                             msg.is_from_agency
                               ? 'bg-[#D4A843] text-[#050A14] rounded-tr-sm'
-                              : 'bg-[#1C2333] text-zinc-100 rounded-tl-sm'
+                              : 'bg-[#18181B] text-zinc-100 rounded-tl-sm'
                           }`}>
                             {!msg.is_from_agency && (
                               <p className="text-xs font-semibold text-[#B0B8C4] mb-1">{msg.sender_name}</p>
@@ -159,7 +159,7 @@ export function AdminSuporteClient({ clients, adminId, adminName }: {
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }}
-                      className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] resize-none min-h-[44px] max-h-[120px]"
+                      className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] resize-none min-h-[44px] max-h-[120px]"
                       rows={1}
                     />
                     <Button

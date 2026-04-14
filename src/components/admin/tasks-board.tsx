@@ -38,16 +38,16 @@ const COLUMNS: {
   accent: string
   iconColor: string
 }[] = [
-  { key: 'identidade_visual', label: 'Identidade Visual', icon: Palette,    bar: 'bg-[rgba(255,255,255,0.06)]',  accent: 'border-[rgba(255,255,255,0.1)]',  iconColor: 'text-[#B0B8C4]' },
-  { key: 'edicao_videos',     label: 'Edição de Vídeos',  icon: Video,      bar: 'bg-[#D4A843]',    accent: 'border-[rgba(255,255,255,0.08)]',    iconColor: 'text-[#D4A843]'   },
-  { key: 'website',           label: 'Website',           icon: Monitor,    bar: 'bg-[#D4A843]', accent: 'border-[rgba(255,255,255,0.08)]', iconColor: 'text-[#D4A843]'},
-  { key: 'trafego_pago',      label: 'Tráfego Pago',      icon: TrendingUp, bar: 'bg-[#D4A843]',   accent: 'border-[rgba(255,255,255,0.08)]',   iconColor: 'text-[#D4A843]'  },
+  { key: 'identidade_visual', label: 'Identidade Visual', icon: Palette,    bar: 'bg-[rgba(212,168,67,0.4)]', accent: 'border-[rgba(255,255,255,0.08)]', iconColor: 'text-[#D4A843]' },
+  { key: 'edicao_videos',     label: 'Edição de Vídeos',  icon: Video,      bar: 'bg-[#D4A843]',              accent: 'border-[rgba(255,255,255,0.08)]', iconColor: 'text-[#D4A843]' },
+  { key: 'website',           label: 'Website',           icon: Monitor,    bar: 'bg-[#D4A843]',              accent: 'border-[rgba(255,255,255,0.08)]', iconColor: 'text-[#D4A843]' },
+  { key: 'trafego_pago',      label: 'Tráfego Pago',      icon: TrendingUp, bar: 'bg-[#D4A843]',              accent: 'border-[rgba(255,255,255,0.08)]', iconColor: 'text-[#D4A843]' },
 ]
 
 const STATUS_CFG: Record<Status, { label: string; cls: string }> = {
-  nao_iniciado: { label: 'Não iniciado',  cls: 'bg-[rgba(255,255,255,0.1)]/50 text-[#B0B8C4] border border-[rgba(255,255,255,0.15)]/50' },
-  em_andamento: { label: 'Em andamento', cls: 'bg-[rgba(255,255,255,0.05)] text-[#D4A843] border border-[rgba(255,255,255,0.08)]' },
-  finalizado:   { label: 'Finalizado',   cls: 'bg-[rgba(255,255,255,0.05)] text-[#D4A843] border border-[rgba(255,255,255,0.08)]' },
+  nao_iniciado: { label: 'Não iniciado',  cls: 'bg-[rgba(255,255,255,0.06)] text-[#B0B8C4] border border-[rgba(255,255,255,0.12)]' },
+  em_andamento: { label: 'Em andamento', cls: 'bg-[rgba(212,168,67,0.12)] text-[#F5D88A] border border-[rgba(212,168,67,0.3)]' },
+  finalizado:   { label: 'Finalizado',   cls: 'bg-[rgba(212,168,67,0.15)] text-[#D4A843] border border-[rgba(212,168,67,0.35)]' },
 }
 
 const CATEGORY_HREF: Record<Category, string> = {
@@ -122,7 +122,7 @@ function TaskCard({
             value={draft}
             onChange={e => setDraft(e.target.value)}
             onKeyDown={e => { if (e.key === 'Escape') cancelEdit() }}
-            className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white text-sm h-8 px-2"
+            className="bg-[#18181B] border-[rgba(255,255,255,0.1)] text-white text-sm h-8 px-2"
           />
 
           {/* Seletor de etiqueta */}
@@ -151,7 +151,7 @@ function TaskCard({
             </button>
             <button
               onClick={cancelEdit}
-              className="w-7 h-7 flex items-center justify-center text-[rgba(176,184,196,0.6)] hover:text-[#D0D8E4] hover:bg-[#1C2333] rounded-lg transition-colors"
+              className="w-7 h-7 flex items-center justify-center text-[rgba(176,184,196,0.6)] hover:text-white hover:bg-[#18181B] rounded-lg transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -164,7 +164,7 @@ function TaskCard({
             <p className="text-white text-sm font-medium leading-snug flex-1">{task.title}</p>
             <button
               onClick={openEdit}
-              className="w-5 h-5 flex items-center justify-center text-zinc-700 hover:text-[#B0B8C4] rounded transition-colors opacity-0 group-hover:opacity-100 shrink-0 mt-0.5"
+              className="w-5 h-5 flex items-center justify-center text-[rgba(176,184,196,0.3)] hover:text-[#B0B8C4] rounded transition-colors opacity-0 group-hover:opacity-100 shrink-0 mt-0.5"
             >
               <Pencil className="w-3 h-3" />
             </button>
@@ -178,7 +178,7 @@ function TaskCard({
           )}
 
           {client && (
-            <span className="inline-block text-xs px-2 py-0.5 rounded-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-[#B0B8C4]">
+            <span className="inline-block text-xs px-2 py-0.5 rounded-full bg-[#18181B] border border-[rgba(255,255,255,0.1)] text-[#B0B8C4]">
               {client.name}
             </span>
           )}
@@ -189,7 +189,7 @@ function TaskCard({
             </span>
             <button
               onClick={remove}
-              className="w-6 h-6 flex items-center justify-center text-zinc-700 hover:text-[rgba(176,184,196,0.7)] hover:bg-[rgba(255,255,255,0.04)] rounded transition-colors opacity-0 group-hover:opacity-100"
+              className="w-6 h-6 flex items-center justify-center text-[rgba(176,184,196,0.3)] hover:text-[rgba(176,184,196,0.7)] hover:bg-[rgba(255,255,255,0.04)] rounded transition-colors opacity-0 group-hover:opacity-100"
             >
               <Trash2 className="w-3 h-3" />
             </button>
@@ -198,7 +198,7 @@ function TaskCard({
           {task.status === 'finalizado' && (
             <Link
               href={CATEGORY_HREF[task.category]}
-              className="flex items-center justify-center gap-2 w-full py-2 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] text-[#D4A843] text-xs font-semibold hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+              className="flex items-center justify-center gap-2 w-full py-2 rounded-lg bg-[rgba(212,168,67,0.06)] border border-[rgba(212,168,67,0.15)] text-[#D4A843] text-xs font-semibold hover:bg-[rgba(212,168,67,0.06)] transition-colors"
             >
               <ArrowUpRight className="w-3.5 h-3.5" />
               Entregar
@@ -247,7 +247,7 @@ function AddCard({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 w-full px-2 py-2 text-[rgba(176,184,196,0.6)] hover:text-[#D0D8E4] hover:bg-[#1C2333]/60 rounded-lg transition-colors text-sm"
+        className="flex items-center gap-2 w-full px-2 py-2 text-[rgba(176,184,196,0.6)] hover:text-white hover:bg-[#18181B]/60 rounded-lg transition-colors text-sm"
       >
         <Plus className="w-4 h-4" />
         Adicionar tarefa
@@ -256,7 +256,7 @@ function AddCard({
   }
 
   return (
-    <div className="bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.12)] rounded-xl p-3 space-y-2.5">
+    <div className="bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.1)] rounded-xl p-3 space-y-2.5">
       <Input
         ref={inputRef}
         value={title}
@@ -266,7 +266,7 @@ function AddCard({
           if (e.key === 'Escape') { setOpen(false); setTitle(''); setDueDate('') }
         }}
         placeholder="Nome da tarefa..."
-        className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white text-sm h-8 placeholder:text-[rgba(176,184,196,0.4)]"
+        className="bg-[#18181B] border-[rgba(255,255,255,0.1)] text-white text-sm h-8 placeholder:text-[rgba(176,184,196,0.4)]"
       />
       <div className="flex items-center gap-2">
         <CalendarClock className="w-3.5 h-3.5 text-[rgba(176,184,196,0.6)] shrink-0" />
@@ -274,7 +274,7 @@ function AddCard({
           type="date"
           value={dueDate}
           onChange={e => setDueDate(e.target.value)}
-          className="flex-1 bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-[#D0D8E4] rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[rgba(212,168,67,0.3)] [color-scheme:dark]"
+          className="flex-1 bg-[#18181B] border border-[rgba(255,255,255,0.1)] text-white rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[rgba(212,168,67,0.3)] [color-scheme:dark]"
         />
       </div>
       <div className="flex items-center gap-2">
@@ -288,7 +288,7 @@ function AddCard({
         </button>
         <button
           onClick={() => { setOpen(false); setTitle('') }}
-          className="w-7 h-7 flex items-center justify-center text-[rgba(176,184,196,0.6)] hover:text-[#D0D8E4] hover:bg-[#1C2333] rounded-lg transition-colors"
+          className="w-7 h-7 flex items-center justify-center text-[rgba(176,184,196,0.6)] hover:text-white hover:bg-[#18181B] rounded-lg transition-colors"
         >
           <X className="w-4 h-4" />
         </button>
@@ -331,11 +331,12 @@ export function TasksBoard({ clients, tarefas: initial }: { clients: Client[]; t
         <div>
           <h1 className="text-2xl font-bold text-white">Visão Geral</h1>
           <p className="text-[#B0B8C4] text-sm mt-0.5">Board de tarefas da agência</p>
+
         </div>
         <select
           value={selectedClient}
           onChange={e => setSelectedClient(e.target.value)}
-          className="bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(212,168,67,0.3)]"
+          className="bg-[#18181B] border border-[rgba(255,255,255,0.1)] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[rgba(212,168,67,0.3)]"
         >
           <option value="todos">Todos os clientes</option>
           {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}

@@ -152,7 +152,7 @@ export function DiagnosticoManager({ clients, diagnostics: initial }: { clients:
                 value={form.clientId}
                 onChange={e => setForm(p => ({ ...p, clientId: e.target.value }))}
                 required
-                className="w-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
+                className="w-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-white rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-500"
               >
                 <option value="">Selecione</option>
                 {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -167,13 +167,13 @@ export function DiagnosticoManager({ clients, diagnostics: initial }: { clients:
                     type="number" min="0" max="100"
                     value={form[stage.key as keyof typeof form]}
                     onChange={e => setForm(p => ({ ...p, [stage.key]: e.target.value }))}
-                    className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white"
+                    className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white"
                   />
                 </div>
               ))}
             </div>
 
-            <div className="p-3 bg-[#1C2333] rounded-lg text-center">
+            <div className="p-3 bg-[#18181B] rounded-lg text-center">
               <p className="text-[#B0B8C4] text-xs">Score Geral (calculado)</p>
               <p className={`text-3xl font-bold mt-1 ${overall >= 80 ? 'text-[#D4A843]' : overall >= 60 ? 'text-[#D4A843]' : 'text-[rgba(176,184,196,0.7)]'}`}>
                 {overall}
@@ -186,7 +186,7 @@ export function DiagnosticoManager({ clients, diagnostics: initial }: { clients:
                 value={form.problems}
                 onChange={e => setForm(p => ({ ...p, problems: e.target.value }))}
                 placeholder="Ex: Identidade visual inconsistente&#10;Falta de presença no Instagram"
-                className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] min-h-[80px]"
+                className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] min-h-[80px]"
               />
             </div>
 
@@ -196,7 +196,7 @@ export function DiagnosticoManager({ clients, diagnostics: initial }: { clients:
                 value={form.opportunities}
                 onChange={e => setForm(p => ({ ...p, opportunities: e.target.value }))}
                 placeholder="Ex: Alto potencial para tráfego pago&#10;Nicho com pouca concorrência"
-                className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] min-h-[80px]"
+                className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] min-h-[80px]"
               />
             </div>
 
@@ -206,7 +206,7 @@ export function DiagnosticoManager({ clients, diagnostics: initial }: { clients:
                 value={form.notes}
                 onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
                 placeholder="Comentários adicionais..."
-                className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]"
+                className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)]"
               />
             </div>
 

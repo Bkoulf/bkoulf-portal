@@ -94,7 +94,7 @@ export function AdminAiChatClient({ adminName }: { adminName: string }) {
       {/* Header */}
       <div className="flex items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.05)] flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.06)] flex items-center justify-center shrink-0">
             <Bot className="w-5 h-5 text-[#D4A843]" />
           </div>
           <div>
@@ -123,7 +123,7 @@ export function AdminAiChatClient({ adminName }: { adminName: string }) {
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {isEmpty ? (
             <div className="flex flex-col items-center justify-center h-full py-10 gap-6">
-              <div className="w-16 h-16 rounded-2xl bg-[rgba(255,255,255,0.05)] flex items-center justify-center">
+              <div className="w-16 h-16 rounded-2xl bg-[rgba(255,255,255,0.06)] flex items-center justify-center">
                 <Bot className="w-8 h-8 text-[#D4A843]" />
               </div>
               <div className="text-center max-w-sm">
@@ -137,7 +137,7 @@ export function AdminAiChatClient({ adminName }: { adminName: string }) {
                   <button
                     key={s}
                     onClick={() => send(s)}
-                    className="text-xs px-3 py-2 rounded-full bg-[#1C2333] border border-[rgba(255,255,255,0.12)] text-[#D0D8E4] hover:text-white hover:border-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.06)] transition-all"
+                    className="text-xs px-3 py-2 rounded-full bg-[#18181B] border border-[rgba(255,255,255,0.12)] text-[#D0D8E4] hover:text-white hover:border-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.06)] transition-all"
                   >
                     {s}
                   </button>
@@ -148,14 +148,14 @@ export function AdminAiChatClient({ adminName }: { adminName: string }) {
             messages.map((msg, i) => (
               <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.role === 'assistant' && (
-                  <div className="w-7 h-7 rounded-lg bg-[rgba(255,255,255,0.05)] flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-lg bg-[rgba(255,255,255,0.06)] flex items-center justify-center shrink-0 mt-0.5">
                     <Bot className="w-4 h-4 text-[#D4A843]" />
                   </div>
                 )}
                 <div className="max-w-[80%] space-y-2">
                   {/* Event created badge */}
                   {msg.eventCreated && (
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#D4A843] bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.08)] rounded-lg px-3 py-2">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-[#D4A843] bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.08)] rounded-lg px-3 py-2">
                       <CalendarCheck className="w-3.5 h-3.5 shrink-0" />
                       Evento criado no calendário do cliente
                     </div>
@@ -163,13 +163,13 @@ export function AdminAiChatClient({ adminName }: { adminName: string }) {
                   <div className={`rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
                     msg.role === 'user'
                       ? 'bg-[#D4A843] text-[#050A14] rounded-tr-sm font-medium'
-                      : 'bg-[#1C2333] text-zinc-100 rounded-tl-sm'
+                      : 'bg-[#18181B] text-zinc-100 rounded-tl-sm'
                   }`}>
                     {msg.content}
                   </div>
                 </div>
                 {msg.role === 'user' && (
-                  <div className="w-7 h-7 rounded-lg bg-[#1C2333] flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-lg bg-[#18181B] flex items-center justify-center shrink-0 mt-0.5">
                     <User className="w-4 h-4 text-[#B0B8C4]" />
                   </div>
                 )}
@@ -179,10 +179,10 @@ export function AdminAiChatClient({ adminName }: { adminName: string }) {
 
           {loading && (
             <div className="flex gap-3 justify-start">
-              <div className="w-7 h-7 rounded-lg bg-[rgba(255,255,255,0.05)] flex items-center justify-center shrink-0">
+              <div className="w-7 h-7 rounded-lg bg-[rgba(255,255,255,0.06)] flex items-center justify-center shrink-0">
                 <Bot className="w-4 h-4 text-[#D4A843]" />
               </div>
-              <div className="bg-[#1C2333] rounded-2xl rounded-tl-sm px-4 py-3">
+              <div className="bg-[#18181B] rounded-2xl rounded-tl-sm px-4 py-3">
                 <TypingDots />
               </div>
             </div>
@@ -202,7 +202,7 @@ export function AdminAiChatClient({ adminName }: { adminName: string }) {
               placeholder="Ex: marcar reunião dia 20/07 às 10h com o cliente X..."
               disabled={loading}
               rows={1}
-              className="bg-[#1C2333] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] resize-none min-h-[44px] max-h-[120px] flex-1"
+              className="bg-[#18181B] border-[rgba(255,255,255,0.12)] text-white placeholder:text-[rgba(176,184,196,0.6)] resize-none min-h-[44px] max-h-[120px] flex-1"
             />
             <Button
               onClick={() => send()}

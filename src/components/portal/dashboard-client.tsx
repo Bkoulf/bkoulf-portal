@@ -31,12 +31,12 @@ interface Props {
 // ─── Design tokens ────────────────────────────────────────────────────────────
 
 const BLUE   = '#2D7DD2'
-const SKY    = '#5BAFF5'
+const SKY    = '#4A9FE8'
 const DEEP   = '#1B4F8A'
-const GOLD   = '#D4A843'
-const SILVER = '#B0B8C4'
-const G_BG   = 'rgba(255,255,255,0.04)'
-const G_BR   = 'rgba(255,255,255,0.08)'
+const BRIGHT = '#7DC4FF'
+const SILVER = '#7AAAC8'
+const G_BG   = 'rgba(45,125,210,0.06)'
+const G_BR   = 'rgba(45,125,210,0.18)'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -52,15 +52,15 @@ const statusLabels: Record<string, string> = {
 }
 
 const bk4Stages = [
-  { key: 'identity_score',    label: 'Identidade Visual', color: SKY   },
-  { key: 'audiovisual_score', label: 'Audiovisual',        color: BLUE  },
-  { key: 'digital_score',     label: 'Presença Digital',   color: DEEP  },
-  { key: 'conversion_score',  label: 'Conversão e Tráfego',color: SILVER},
+  { key: 'identity_score',    label: 'Identidade Visual', color: BRIGHT },
+  { key: 'audiovisual_score', label: 'Audiovisual',        color: SKY   },
+  { key: 'digital_score',     label: 'Presença Digital',   color: BLUE  },
+  { key: 'conversion_score',  label: 'Conversão e Tráfego',color: DEEP  },
 ]
 
 const deliverableStatusMap: Record<string, { label: string; color: string }> = {
   aguardando_aprovacao: { label: 'Aguardando aprovação', color: SKY    },
-  aprovado:             { label: 'Aprovado',              color: GOLD   },
+  aprovado:             { label: 'Aprovado',              color: BRIGHT },
   ajuste_solicitado:    { label: 'Ajuste solicitado',     color: SILVER },
   entregue:             { label: 'Entregue',              color: BLUE   },
 }
@@ -146,7 +146,7 @@ export function DashboardClient({ firstName, services, deliverables, demands, di
   const trendData           = generateTrend(deliverables)
 
   const deliverableDistribution = [
-    { name: 'Aprovadas',   value: deliverables.filter(d => d.status === 'aprovado').length,              color: GOLD   },
+    { name: 'Aprovadas',   value: deliverables.filter(d => d.status === 'aprovado').length,              color: BRIGHT },
     { name: 'Aguardando',  value: deliverables.filter(d => d.status === 'aguardando_aprovacao').length,  color: SKY    },
     { name: 'Ajuste',      value: deliverables.filter(d => d.status === 'ajuste_solicitado').length,     color: SILVER },
     { name: 'Entregues',   value: deliverables.filter(d => d.status === 'entregue').length,              color: BLUE   },
@@ -292,8 +292,8 @@ export function DashboardClient({ firstName, services, deliverables, demands, di
                       className="text-xs px-2 py-0.5 rounded-full font-medium"
                       style={
                         service.status === 'ativo'
-                          ? { background: 'rgba(212,168,67,0.1)', color: GOLD, border: '1px solid rgba(212,168,67,0.25)' }
-                          : { background: 'rgba(255,255,255,0.05)', color: SILVER, border: `1px solid ${G_BR}` }
+                          ? { background: 'rgba(45,125,210,0.15)', color: BRIGHT, border: '1px solid rgba(45,125,210,0.35)' }
+                          : { background: 'rgba(45,125,210,0.05)', color: SILVER, border: `1px solid ${G_BR}` }
                       }
                     >
                       {statusLabels[service.status]}
