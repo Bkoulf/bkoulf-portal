@@ -47,24 +47,68 @@ export default async function RelatoriosPage() {
     .from('profiles').select('client_id').eq('id', user!.id).single()
   const clienteId = profile?.client_id ?? ''
 
-  // Busca reports, serviços e métricas de cada serviço em paralelo
+  // Busca reports, serviços, métricas e todas as entregas em paralelo
   const [
     { data: reports },
     { data: services },
     { data: metricas },
     { data: contrato },
-    { count: videosEntreguesCount },
+    { data: videosAll },
     { data: identidade },
     { data: website },
+    { data: deliverables },
   ] = await Promise.all([
     supabase.from('reports').select('*').eq('client_id', clienteId).order('created_at', { ascending: false }),
     supabase.from('services').select('*').eq('client_id', clienteId),
     supabase.from('trafego_pago_metricas').select('investimento, leads, periodo').eq('client_id', clienteId).order('periodo', { ascending: false }).limit(1).maybeSingle(),
     supabase.from('contratos_video').select('total_combinado').eq('cliente_id', clienteId).maybeSingle(),
-    supabase.from('videos').select('id', { count: 'exact', head: true }).eq('cliente_id', clienteId).eq('status', 'entregue'),
-    supabase.from('identidade_visual').select('status').eq('cliente_id', clienteId).maybeSingle(),
-    supabase.from('websites').select('status, url').eq('cliente_id', clienteId).maybeSingle(),
+    supabase.from('videos').select('id, titulo, status, criado_em').eq('cliente_id', clienteId).in('status', ['entregue', 'aprovado', 'reprovado']).order('criado_em', { ascending: false }),
+    supabase.from('identidade_visual').select('id, status, atualizado_em').eq('cliente_id', clienteId).maybeSingle(),
+    supabase.from('websites').select('id, status, url, atualizado_em').eq('cliente_id', clienteId).maybeSingle(),
+    supabase.from('deliverables').select('id, title, status, due_date, created_at').eq('client_id', clienteId).order('created_at', { ascending: false }),
   ])
+
+  const videosEntreguesCount = (videosAll ?? []).filter(v => v.status === 'entregue').length
+
+  // Monta lista unificada de todas as entregas
+  type EntregaUnificada = {
+    id: string
+    titulo: string
+    tipo: string
+    status: string
+    data: string
+  }
+
+  const todasEntregas: EntregaUnificada[] = [
+    ...(deliverables ?? []).map(d => ({
+      id: d.id,
+      titulo: d.title,
+      tipo: 'Entrega',
+      status: d.status,
+      data: d.created_at,
+    })),
+    ...(videosAll ?? []).map(v => ({
+      id: `video-${v.id}`,
+      titulo: v.titulo,
+      tipo: 'Vídeo',
+      status: v.status,
+      data: v.criado_em,
+    })),
+    ...(identidade && identidade.status === 'entregue' ? [{
+      id: `identidade-${identidade.id}`,
+      titulo: 'Identidade Visual',
+      tipo: 'Identidade Visual',
+      status: 'entregue',
+      data: identidade.atualizado_em ?? '',
+    }] : []),
+    ...(website && ['entregue', 'manutencao', 'em_revisao'].includes(website.status ?? '') ? [{
+      id: `website-${website.id}`,
+      titulo: 'Website',
+      tipo: 'Website',
+      status: website.status ?? '',
+      data: website.atualizado_em ?? '',
+    }] : []),
+  ].sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
 
   const activeServices = (services ?? []).filter(s => s.status !== 'pausado')
 
@@ -238,6 +282,68 @@ export default async function RelatoriosPage() {
                         <Download className="w-4 h-4" />
                       </a>
                     </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* Histórico unificado de entregas */}
+      <section className="space-y-3">
+        <div className="flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-zinc-500" />
+          <h2 className="text-white font-semibold text-sm">Histórico de entregas</h2>
+          <span className="text-zinc-600 text-xs">— todos os tipos</span>
+        </div>
+
+        {todasEntregas.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 gap-3 bg-zinc-900 border border-zinc-800 rounded-xl">
+            <Clock className="w-7 h-7 text-zinc-600" />
+            <p className="text-zinc-500 text-sm">Nenhuma entrega registrada ainda</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {todasEntregas.map(e => {
+              const statusMap: Record<string, { label: string; color: string }> = {
+                entregue:             { label: 'Entregue',            color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
+                aguardando_aprovacao: { label: 'Aguard. aprovação',   color: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20' },
+                aprovado:             { label: 'Aprovado',            color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
+                ajuste_solicitado:    { label: 'Ajuste solicitado',   color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' },
+                reprovado:            { label: 'Reprovado',           color: 'text-red-400 bg-red-500/10 border-red-500/20' },
+                manutencao:           { label: 'Em manutenção',       color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
+                em_revisao:           { label: 'Em revisão',          color: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20' },
+              }
+              const tipoInfo = serviceInfo[
+                e.tipo === 'Vídeo' ? 'edicao_videos'
+                : e.tipo === 'Identidade Visual' ? 'identidade_visual'
+                : e.tipo === 'Website' ? 'website'
+                : 'trafego_pago'
+              ]
+              const Icon = tipoInfo?.icon ?? FileText
+              const badge = statusMap[e.status]
+
+              return (
+                <div key={e.id} className="flex items-center gap-4 p-4 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center shrink-0">
+                    <Icon className={`w-5 h-5 ${tipoInfo?.color ?? 'text-zinc-400'}`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white text-sm font-medium truncate">{e.titulo}</p>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full bg-zinc-800 ${tipoInfo?.color ?? 'text-zinc-400'}`}>
+                      {e.tipo}
+                    </span>
+                  </div>
+                  {badge && (
+                    <span className={`text-xs px-2.5 py-1 rounded-full border shrink-0 ${badge.color}`}>
+                      {badge.label}
+                    </span>
+                  )}
+                  {e.data && (
+                    <p className="text-zinc-600 text-xs shrink-0 hidden sm:block">
+                      {new Date(e.data).toLocaleDateString('pt-BR')}
+                    </p>
                   )}
                 </div>
               )

@@ -92,6 +92,8 @@ export function LeadsDashboard({ leads, config: initialConfig }: Props) {
   const [savingConfig, setSavingConfig] = useState(false)
   const [togglingAtivo, setTogglingAtivo] = useState(false)
   const [analyticsOpen, setAnalyticsOpen] = useState(true)
+  const [executando, setExecutando] = useState(false)
+  const [executarMensagem, setExecutarMensagem] = useState<{ tipo: 'ok' | 'erro'; texto: string } | null>(null)
 
   async function toggleAtivo() {
     setTogglingAtivo(true)
@@ -279,6 +281,29 @@ export function LeadsDashboard({ leads, config: initialConfig }: Props) {
     }
   }, [leads])
 
+  async function executarAgora(cidade?: string) {
+    setExecutando(true)
+    setExecutarMensagem(null)
+    try {
+      const res = await fetch('/api/leads/executar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cidade ? { cidade } : {}),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setExecutarMensagem({ tipo: 'erro', texto: data.error ?? 'Erro ao disparar workflow' })
+      } else {
+        setExecutarMensagem({ tipo: 'ok', texto: 'Workflow disparado com sucesso! Aguarde novos leads.' })
+        setTimeout(() => setExecutarMensagem(null), 6000)
+      }
+    } catch {
+      setExecutarMensagem({ tipo: 'erro', texto: 'Não foi possível conectar ao servidor' })
+    } finally {
+      setExecutando(false)
+    }
+  }
+
   async function saveConfig() {
     setSavingConfig(true)
     await supabase.from('leads_config').upsert({
@@ -320,6 +345,20 @@ export function LeadsDashboard({ leads, config: initialConfig }: Props) {
           </button>
 
           <button
+            onClick={() => executarAgora()}
+            disabled={executando}
+            title="Dispara o workflow n8n manualmente para buscar novos leads agora"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all"
+            style={{ background: 'rgba(212,168,67,0.1)', border: '1px solid rgba(212,168,67,0.25)', color: '#D4A843' }}
+          >
+            {executando
+              ? <Loader2 className="w-4 h-4 animate-spin" />
+              : <Play className="w-4 h-4" />
+            }
+            <span className="hidden sm:inline">{executando ? 'Buscando...' : 'Executar agora'}</span>
+          </button>
+
+          <button
             onClick={toggleAtivo}
             disabled={togglingAtivo}
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all"
@@ -338,6 +377,22 @@ export function LeadsDashboard({ leads, config: initialConfig }: Props) {
           </button>
         </div>
       </div>
+
+      {/* Feedback execução manual */}
+      {executarMensagem && (
+        <div
+          className="flex items-center gap-3 px-4 py-3 rounded-xl border text-sm font-medium"
+          style={executarMensagem.tipo === 'ok'
+            ? { background: 'rgba(34,197,94,0.08)', borderColor: 'rgba(34,197,94,0.25)', color: '#4ade80' }
+            : { background: 'rgba(239,68,68,0.08)', borderColor: 'rgba(239,68,68,0.25)', color: '#f87171' }
+          }
+        >
+          {executarMensagem.texto}
+          <button onClick={() => setExecutarMensagem(null)} className="ml-auto opacity-60 hover:opacity-100">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">

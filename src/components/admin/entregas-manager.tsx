@@ -37,11 +37,25 @@ const statusLabels: Record<string, string> = {
 interface Client { id: string; name: string }
 interface Service { id: string; client_id: string; type: string; status: string }
 interface Deliverable { id: string; service_id: string; client_id: string; title: string; description?: string; status: string; file_url?: string; due_date?: string; created_at: string }
+interface VideoItem { id: string; cliente_id: string; titulo: string; status: string; criado_em: string }
 
-export function EntregasManager({ clients, services, deliverables: initialDeliverables }: {
+const videoStatusLabels: Record<string, string> = {
+  entregue: 'Aguardando aprovação',
+  aprovado: 'Aprovado pelo cliente',
+  reprovado: 'Reprovado — ajuste',
+}
+
+const videoStatusColors: Record<string, string> = {
+  entregue: 'bg-[rgba(255,255,255,0.06)] text-yellow-400 border-yellow-400/20',
+  aprovado: 'bg-[rgba(255,255,255,0.06)] text-green-400 border-green-400/20',
+  reprovado: 'bg-[rgba(255,255,255,0.06)] text-red-400 border-red-400/20',
+}
+
+export function EntregasManager({ clients, services, deliverables: initialDeliverables, videos = [] }: {
   clients: Client[]
   services: Service[]
   deliverables: Deliverable[]
+  videos?: VideoItem[]
 }) {
   const [deliverables, setDeliverables] = useState(initialDeliverables)
   const [showNew, setShowNew] = useState(false)
@@ -105,7 +119,7 @@ export function EntregasManager({ clients, services, deliverables: initialDelive
             <PackageCheck className="w-6 h-6 text-[#D4A843]" />
             <div>
               <h1 className="text-2xl font-bold text-white">Entregas</h1>
-              <p className="text-[#B0B8C4] text-sm mt-0.5">{deliverables.length} entregas registradas</p>
+              <p className="text-[#B0B8C4] text-sm mt-0.5">{deliverables.length + videos.length} entregas registradas</p>
             </div>
           </div>
           <Button onClick={() => setShowNew(true)} className="bg-[#D4A843] text-[#050A14] hover:bg-[#D4A843] font-semibold">
@@ -116,7 +130,7 @@ export function EntregasManager({ clients, services, deliverables: initialDelive
 
         <Card className="bg-[rgba(255,255,255,0.04)] border-[rgba(255,255,255,0.08)]">
           <CardContent className="pt-6">
-            {deliverables.length === 0 ? (
+            {deliverables.length === 0 && videos.length === 0 ? (
               <p className="text-[rgba(176,184,196,0.6)] text-sm">Nenhuma entrega registrada ainda.</p>
             ) : (
               <div className="overflow-x-auto">
@@ -145,6 +159,24 @@ export function EntregasManager({ clients, services, deliverables: initialDelive
                         <td className="py-3">
                           <span className={`text-xs px-2 py-0.5 rounded-full border ${statusColors[d.status]}`}>
                             {statusLabels[d.status]}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                    {videos.map((v) => (
+                      <tr key={`video-${v.id}`} className="border-b border-[rgba(255,255,255,0.08)]/50 last:border-0">
+                        <td className="py-3 pr-4">
+                          <p className="font-medium text-white">{v.titulo}</p>
+                          <p className="text-xs text-[rgba(176,184,196,0.4)] mt-0.5">Vídeo</p>
+                        </td>
+                        <td className="py-3 pr-4 text-[#D0D8E4]">{getClientName(v.cliente_id)}</td>
+                        <td className="py-3 pr-4 text-[#D0D8E4]">Edição de Vídeos</td>
+                        <td className="py-3 pr-4 text-[#B0B8C4] text-xs">
+                          {new Date(v.criado_em).toLocaleDateString('pt-BR')}
+                        </td>
+                        <td className="py-3">
+                          <span className={`text-xs px-2 py-0.5 rounded-full border ${videoStatusColors[v.status] ?? ''}`}>
+                            {videoStatusLabels[v.status] ?? v.status}
                           </span>
                         </td>
                       </tr>

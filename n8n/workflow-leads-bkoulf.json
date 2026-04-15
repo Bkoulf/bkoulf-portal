@@ -1,0 +1,361 @@
+{
+  "name": "Bkoulf — Captura de Leads",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "bkoulf-leads",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "bkoulf-leads-trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extrai configurações do payload ou usa defaults\nconst body = $input.first().json.body ?? $input.first().json;\n\nconst cidades = body.cidades ?? ['Cotia', 'Vargem Grande Paulista', 'Itapevi', 'Embu das Artes', 'Osasco'];\nconst raio_km = body.raio_km ?? 30;\nconst limite_diario = body.limite_diario ?? 30;\n\n// Horário comercial: seg-sex, 9h-17h30, sem 12h-13h30\nconst agora = new Date();\nconst hora = agora.getHours();\nconst minuto = agora.getMinutes();\nconst diaSemana = agora.getDay(); // 0=Dom, 6=Sáb\n\nconst fimDeSemana = diaSemana === 0 || diaSemana === 6;\nconst foraDo_horario = hora < 9 || (hora === 17 && minuto > 30) || hora >= 18;\nconst almoco = hora === 12 || (hora === 13 && minuto < 30);\n\nif (fimDeSemana || foraDo_horario || almoco) {\n  return [{ json: { skip: true, motivo: 'Fora do horário comercial', cidades, raio_km, limite_diario } }];\n}\n\nreturn [{ json: { skip: false, cidades, raio_km, limite_diario } }];"
+      },
+      "id": "check-horario",
+      "name": "Verifica Horário",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true },
+          "conditions": [
+            {
+              "id": "skip-check",
+              "leftValue": "={{ $json.skip }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "notTrue" }
+            }
+          ]
+        },
+        "combineOperation": "all"
+      },
+      "id": "if-horario",
+      "name": "Horário OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: false, motivo: $('Verifica Horário').first().json.motivo } }}"
+      },
+      "id": "respond-skip",
+      "name": "Responde Skip",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [680, 520]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Verifica quantas mensagens já foram enviadas hoje via Supabase REST\nconst SUPABASE_URL = $env['SUPABASE_URL'];\nconst SUPABASE_SERVICE_KEY = $env['SUPABASE_SERVICE_KEY'];\nconst limite_diario = $json.limite_diario;\n\nconst hoje = new Date().toISOString().slice(0, 10);\nconst url = `${SUPABASE_URL}/rest/v1/leads?select=count&enviado_em=gte.${hoje}T00:00:00&status=neq.capturado`;\n\nconst res = await fetch(url, {\n  headers: {\n    apikey: SUPABASE_SERVICE_KEY,\n    Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,\n    Prefer: 'count=exact',\n    Range: '0-0',\n  },\n});\n\nconst countHeader = res.headers.get('content-range');\nconst total = parseInt(countHeader?.split('/')[1] ?? '0', 10);\nconst restante = Math.max(0, limite_diario - total);\n\nreturn [{ json: { ...$json, enviados_hoje: total, restante, limite_diario } }];"
+      },
+      "id": "check-limite",
+      "name": "Verifica Limite Diário",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {},
+          "conditions": [
+            {
+              "id": "limite-check",
+              "leftValue": "={{ $json.restante }}",
+              "rightValue": 0,
+              "operator": { "type": "number", "operation": "gt" }
+            }
+          ]
+        }
+      },
+      "id": "if-limite",
+      "name": "Ainda há limite?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: false, motivo: 'Limite diário atingido', enviados_hoje: $json.enviados_hoje } }}"
+      },
+      "id": "respond-limite",
+      "name": "Responde Limite",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 520]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega uma cidade aleatória das cidades configuradas\nconst cidades = $json.cidades;\nconst cidade = cidades[Math.floor(Math.random() * cidades.length)];\nreturn [{ json: { ...$json, cidade_atual: cidade } }];"
+      },
+      "id": "pick-cidade",
+      "name": "Escolhe Cidade",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://maps.googleapis.com/maps/api/place/textsearch/json",
+        "authentication": "none",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "query", "value": "=empresa {{ $json.cidade_atual }} Brasil" },
+            { "name": "radius", "value": "={{ $json.raio_km * 1000 }}" },
+            { "name": "key", "value": "={{ $env['GOOGLE_PLACES_API_KEY'] }}" },
+            { "name": "language", "value": "pt-BR" },
+            { "name": "region", "value": "br" }
+          ]
+        }
+      },
+      "id": "google-places",
+      "name": "Google Places API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1560, 300]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "results",
+        "options": {}
+      },
+      "id": "split-results",
+      "name": "Split Resultados",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [1780, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filtra empresas sem telefone ou já processadas\nconst item = $json;\nconst placeId = item.place_id;\nif (!placeId) return [];\n\n// Busca detalhes para pegar telefone\nconst GOOGLE_KEY = $env['GOOGLE_PLACES_API_KEY'];\nconst detailUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,formatted_phone_number,website,rating,user_ratings_total,formatted_address,types&key=${GOOGLE_KEY}&language=pt-BR`;\n\nconst res = await fetch(detailUrl);\nconst data = await res.json();\nconst result = data.result;\n\nif (!result) return [];\n\nconst telefone = result.formatted_phone_number;\nif (!telefone) return []; // Sem telefone = descarta\n\n// Extrai segmento dos types do Google\nconst typeMap: Record<string, string> = {\n  restaurant: 'Restaurante',\n  food: 'Alimentação',\n  health: 'Saúde',\n  beauty_salon: 'Beleza',\n  hair_care: 'Beleza',\n  store: 'Varejo',\n  clothing_store: 'Moda',\n  electronics_store: 'Eletrônicos',\n  furniture_store: 'Móveis',\n  gym: 'Academia',\n  real_estate_agency: 'Imobiliária',\n  car_repair: 'Automotivo',\n  car_dealer: 'Automotivo',\n  lawyer: 'Advocacia',\n  accounting: 'Contabilidade',\n  dentist: 'Odontologia',\n  doctor: 'Medicina',\n  school: 'Educação',\n  lodging: 'Hospedagem',\n};\n\nconst types = result.types ?? [];\nlet segmento = 'Outros';\nfor (const t of types) {\n  if (typeMap[t]) { segmento = typeMap[t]; break; }\n}\n\nreturn [{\n  json: {\n    empresa: result.name,\n    telefone: telefone.replace(/[^\\d+]/g, ''),\n    cidade: $('Escolhe Cidade').first().json.cidade_atual,\n    endereco: result.formatted_address,\n    segmento,\n    website: result.website ?? null,\n    google_place_id: placeId,\n    rating: result.rating ?? null,\n    total_reviews: result.user_ratings_total ?? null,\n    raio_km: $('Escolhe Cidade').first().json.raio_km,\n  }\n}];"
+      },
+      "id": "enrich-lead",
+      "name": "Enriquece Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env['SUPABASE_URL'] }}/rest/v1/leads",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env['SUPABASE_SERVICE_KEY'] }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env['SUPABASE_SERVICE_KEY'] }}" },
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Prefer", "value": "return=minimal,resolution=ignore-duplicates" }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "empresa", "value": "={{ $json.empresa }}" },
+            { "name": "telefone", "value": "={{ $json.telefone }}" },
+            { "name": "cidade", "value": "={{ $json.cidade }}" },
+            { "name": "endereco", "value": "={{ $json.endereco }}" },
+            { "name": "segmento", "value": "={{ $json.segmento }}" },
+            { "name": "website", "value": "={{ $json.website }}" },
+            { "name": "google_place_id", "value": "={{ $json.google_place_id }}" },
+            { "name": "rating", "value": "={{ $json.rating }}" },
+            { "name": "total_reviews", "value": "={{ $json.total_reviews }}" },
+            { "name": "status", "value": "capturado" }
+          ]
+        }
+      },
+      "id": "save-supabase",
+      "name": "Salva no Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2220, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Verifica se o lead é novo (não duplicata)\nconst SUPABASE_URL = $env['SUPABASE_URL'];\nconst SUPABASE_SERVICE_KEY = $env['SUPABASE_SERVICE_KEY'];\nconst google_place_id = $json.google_place_id;\n\nconst res = await fetch(\n  `${SUPABASE_URL}/rest/v1/leads?google_place_id=eq.${encodeURIComponent(google_place_id)}&select=id,status`,\n  {\n    headers: {\n      apikey: SUPABASE_SERVICE_KEY,\n      Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,\n    },\n  }\n);\n\nconst data = await res.json();\nconst lead = data[0];\n\nif (!lead) return []; // Lead não salvo, skip\nif (lead.status !== 'capturado') return []; // Já foi processado\n\nreturn [{ json: { ...$json, lead_id: lead.id } }];"
+      },
+      "id": "check-novo",
+      "name": "É Lead Novo?",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2440, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.anthropic.com/v1/messages",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-api-key", "value": "={{ $env['ANTHROPIC_API_KEY'] }}" },
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 400,\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Você é um especialista em marketing B2B da Bkoulf, uma agência que transforma negócios locais com o Método BK4 (Identidade Visual → Audiovisual → Presença Digital → Conversão e Tráfego).\\n\\nEscreva uma mensagem de WhatsApp personalizada para prospectar esta empresa. A mensagem deve:\\n1. Começar com \\\"Olá, [Nome da empresa]\\\"\\n2. Referenciar brevemente o segmento/cidade da empresa\\n3. Apresentar o Método BK4 de forma consultiva (não vendedora)\\n4. Máx 3 parágrafos curtos\\n5. Finalizar com \\\"Se quiser saber mais, responda aqui. Para não receber mais mensagens, responda PARE.\\\"\\n\\nEMPRESA:\\n- Nome: {{ $json.empresa }}\\n- Segmento: {{ $json.segmento }}\\n- Cidade: {{ $json.cidade }}\\n- Tem website: {{ $json.website ? 'Sim' : 'Não' }}\\n- Avaliação Google: {{ $json.rating ?? 'N/A' }}/5 ({{ $json.total_reviews ?? 0 }} avaliações)\\n\\nRetorne SOMENTE a mensagem, sem prefácio, sem aspas, sem formatação especial.\"\n    }\n  ]\n}"
+      },
+      "id": "claude-mensagem",
+      "name": "Claude — Gera Mensagem",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2660, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const resposta = $json.content?.[0]?.text ?? '';\nconst lead = $('check-novo').first().json;\nreturn [{ json: { ...lead, mensagem_gerada: resposta.trim() } }];"
+      },
+      "id": "extrai-mensagem",
+      "name": "Extrai Mensagem",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2880, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Delay aleatório entre 45 segundos e 3 minutos para simular comportamento humano\nconst minMs = 45_000;\nconst maxMs = 180_000;\nconst delay = Math.floor(Math.random() * (maxMs - minMs + 1)) + minMs;\nawait new Promise(resolve => setTimeout(resolve, delay));\nreturn [$input.first()];"
+      },
+      "id": "delay-humano",
+      "name": "Delay Humanizado",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3100, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env['EVOLUTION_API_URL'] }}/message/sendText/{{ $env['EVOLUTION_INSTANCE'] }}",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env['EVOLUTION_API_KEY'] }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"55{{ $json.telefone }}\",\n  \"text\": {{ JSON.stringify($json.mensagem_gerada) }},\n  \"delay\": 1500\n}"
+      },
+      "id": "envia-whatsapp",
+      "name": "Envia WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3320, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env['SUPABASE_URL'] }}/rest/v1/leads?google_place_id=eq.{{ $('extrai-mensagem').first().json.google_place_id }}",
+        "authentication": "none",
+        "method": "PATCH",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $env['SUPABASE_SERVICE_KEY'] }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env['SUPABASE_SERVICE_KEY'] }}" },
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Prefer", "value": "return=minimal" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"mensagem_enviada\",\n  \"mensagem_enviada\": {{ JSON.stringify($('extrai-mensagem').first().json.mensagem_gerada) }},\n  \"whatsapp_valido\": true,\n  \"enviado_em\": \"{{ new Date().toISOString() }}\"\n}"
+      },
+      "id": "atualiza-status",
+      "name": "Atualiza Status Enviado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3540, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ ok: true, processados: 'ver logs' }"
+      },
+      "id": "respond-ok",
+      "name": "Responde OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [3760, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [[{ "node": "Verifica Horário", "type": "main", "index": 0 }]]
+    },
+    "Verifica Horário": {
+      "main": [[{ "node": "Horário OK?", "type": "main", "index": 0 }]]
+    },
+    "Horário OK?": {
+      "main": [
+        [{ "node": "Verifica Limite Diário", "type": "main", "index": 0 }],
+        [{ "node": "Responde Skip", "type": "main", "index": 0 }]
+      ]
+    },
+    "Verifica Limite Diário": {
+      "main": [[{ "node": "Ainda há limite?", "type": "main", "index": 0 }]]
+    },
+    "Ainda há limite?": {
+      "main": [
+        [{ "node": "Escolhe Cidade", "type": "main", "index": 0 }],
+        [{ "node": "Responde Limite", "type": "main", "index": 0 }]
+      ]
+    },
+    "Escolhe Cidade": {
+      "main": [[{ "node": "Google Places API", "type": "main", "index": 0 }]]
+    },
+    "Google Places API": {
+      "main": [[{ "node": "Split Resultados", "type": "main", "index": 0 }]]
+    },
+    "Split Resultados": {
+      "main": [[{ "node": "Enriquece Lead", "type": "main", "index": 0 }]]
+    },
+    "Enriquece Lead": {
+      "main": [[{ "node": "Salva no Supabase", "type": "main", "index": 0 }]]
+    },
+    "Salva no Supabase": {
+      "main": [[{ "node": "É Lead Novo?", "type": "main", "index": 0 }]]
+    },
+    "É Lead Novo?": {
+      "main": [[{ "node": "Claude — Gera Mensagem", "type": "main", "index": 0 }]]
+    },
+    "Claude — Gera Mensagem": {
+      "main": [[{ "node": "Extrai Mensagem", "type": "main", "index": 0 }]]
+    },
+    "Extrai Mensagem": {
+      "main": [[{ "node": "Delay Humanizado", "type": "main", "index": 0 }]]
+    },
+    "Delay Humanizado": {
+      "main": [[{ "node": "Envia WhatsApp", "type": "main", "index": 0 }]]
+    },
+    "Envia WhatsApp": {
+      "main": [[{ "node": "Atualiza Status Enviado", "type": "main", "index": 0 }]]
+    },
+    "Atualiza Status Enviado": {
+      "main": [[{ "node": "Responde OK", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}

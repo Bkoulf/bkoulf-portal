@@ -34,8 +34,7 @@ export async function POST(request: Request) {
 
   await adminClient
     .from('profiles')
-    .update({ full_name: fullName, role: 'admin' })
-    .eq('id', newUser.user.id)
+    .upsert({ id: newUser.user.id, full_name: fullName, role: 'admin' })
 
   return NextResponse.json({ success: true, userId: newUser.user.id })
 }

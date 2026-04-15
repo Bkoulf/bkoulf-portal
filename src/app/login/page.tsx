@@ -84,6 +84,15 @@ function ClientForm() {
         >
           {loading ? 'Entrando...' : 'Entrar'}
         </button>
+
+        <a
+          href="https://wa.me/5511999999999"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-1.5 w-full pt-2 text-xs text-[rgba(176,184,196,0.45)] hover:text-[rgba(176,184,196,0.75)] transition-colors"
+        >
+          Esqueci o login <ArrowRight className="w-3 h-3" />
+        </a>
       </form>
 
       <a
@@ -183,6 +192,15 @@ function AdminForm() {
         >
           {loading ? 'Verificando...' : 'Entrar como Admin'}
         </button>
+
+        <a
+          href="https://wa.me/5511999999999"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-1.5 w-full pt-2 text-xs text-[rgba(176,184,196,0.45)] hover:text-[rgba(176,184,196,0.75)] transition-colors"
+        >
+          Esqueci o login <ArrowRight className="w-3 h-3" />
+        </a>
       </form>
 
       <a href="/login" className="flex items-center gap-2 py-3 text-sm font-medium text-[#B0B8C4] mt-2">

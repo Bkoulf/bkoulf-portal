@@ -17,23 +17,30 @@ export default async function AdminEntregasPage() {
     { data: clients },
     { data: services },
     { data: deliverables },
+    { data: videos },
     { count: totalClients },
     { count: pendingDeliverables },
+    { count: pendingVideos },
     { count: openDemands },
     { count: unreadMessages },
   ] = await Promise.all([
     supabase.from('clients').select('id, name').eq('status', 'ativo').order('name'),
     supabase.from('services').select('id, client_id, type, status'),
     supabase.from('deliverables').select('*').order('created_at', { ascending: false }),
+    supabase.from('videos').select('id, cliente_id, titulo, status, criado_em').in('status', ['entregue', 'aprovado', 'reprovado']).order('criado_em', { ascending: false }),
     supabase.from('clients').select('*', { count: 'exact', head: true }).eq('status', 'ativo'),
     supabase.from('deliverables').select('*', { count: 'exact', head: true }).eq('status', 'aguardando_aprovacao'),
+    supabase.from('videos').select('*', { count: 'exact', head: true }).eq('status', 'entregue'),
     supabase.from('demands').select('*', { count: 'exact', head: true }).in('status', ['aberta', 'em_andamento']),
     supabase.from('messages').select('*', { count: 'exact', head: true }).eq('is_from_agency', false).eq('read', false),
   ])
 
+  // Vídeos entregues (aguardando aprovação do cliente) + deliverables aguardando
+  const totalAguardando = (pendingDeliverables ?? 0) + (pendingVideos ?? 0)
+
   const cards = [
     { label: 'Clientes ativos', value: totalClients ?? 0, icon: Users, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-    { label: 'Aguardando aprovação', value: pendingDeliverables ?? 0, icon: PackageCheck, color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
+    { label: 'Aguardando aprovação', value: totalAguardando, icon: PackageCheck, color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
     { label: 'Demandas em aberto', value: openDemands ?? 0, icon: Clock, color: 'text-purple-400', bg: 'bg-purple-500/10' },
     { label: 'Mensagens não lidas', value: unreadMessages ?? 0, icon: MessageSquare, color: 'text-green-400', bg: 'bg-green-500/10' },
   ]
@@ -65,6 +72,7 @@ export default async function AdminEntregasPage() {
         clients={clients ?? []}
         services={services ?? []}
         deliverables={deliverables ?? []}
+        videos={videos ?? []}
       />
     </div>
   )
